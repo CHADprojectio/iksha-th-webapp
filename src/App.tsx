@@ -2,25 +2,30 @@
 import '@telegram-apps/telegram-ui/dist/styles.css'
 
 // Import components from the library
-import { AppRoot, Cell, List, Section } from '@telegram-apps/telegram-ui'
+import { AppRoot, Card } from '@telegram-apps/telegram-ui'
+import React from 'react'
+import { CardCell } from '@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell'
 
-// Example data for rendering list cells
-const cellsTexts = ['Chat Settings', 'Data and Storage', 'Devices']
-
-export const App = () => (
+const App = () => (
 	<AppRoot>
-		{/* List component to display a collection of items */}
-		<List>
-			{/* Section component to group items within the list */}
-			<Section
-				header='Header for the section'
-				footer='Footer for the section'
-			>
-				{/* Mapping through the cells data to render Cell components */}
-				{cellsTexts.map((cellText, index) => (
-					<Cell key={index}>{cellText}</Cell>
-				))}
-			</Section>
-		</List>
+		<Card onClick={() => {}}>
+			<React.Fragment key='.0'>
+				<img
+					alt='Dog'
+					src='https://i.imgur.com/892vhef.jpeg'
+					style={{
+						display: 'block',
+						height: 308,
+						objectFit: 'cover',
+						width: 254,
+					}}
+				/>
+				<CardCell readOnly subtitle='United states'>
+					New York
+				</CardCell>
+			</React.Fragment>
+		</Card>
 	</AppRoot>
 )
+
+export default App
