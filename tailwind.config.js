@@ -10,7 +10,7 @@ export default {
         bg: "var(--bg)",
         button: "var(--button)",
         h1: "var(--h1)",
-        p: "var(--p)"
+        p: "var(--h1)"
       }
     },
   },

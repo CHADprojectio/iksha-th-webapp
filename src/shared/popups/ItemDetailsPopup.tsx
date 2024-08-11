@@ -1,4 +1,9 @@
-import { Button, IconButton } from '@telegram-apps/telegram-ui'
+import {
+	Button,
+	Caption,
+	Headline,
+	IconButton,
+} from '@telegram-apps/telegram-ui'
 import IDatabaseItem from 'interfaces/IDatabaseItem'
 import React, { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -64,9 +69,9 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 		<div className='flex items-center justify-center popup_bg'>
 			<div className='w-[90vw] overflow-y-scroll rounded-md p-5 text-p bg-bg h-[90vh] shadow-2xl'>
 				<div className='flex items-center justify-between'>
-					<h2 className='font-semibold text-h1 text-[25px]'>
+					<Headline weight='2' className='font-semibold '>
 						{item.title}
-					</h2>
+					</Headline>
 					<IconButton
 						mode='plain'
 						size='s'
@@ -76,7 +81,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 					</IconButton>
 				</div>
 				<div className='flex gap-2 mb-3'>
-					<div>{item.price}р</div>
+					<Caption level='1'>{item.price}р</Caption>
 					{item.paymentDescription && <div>{item.paymentDescription}</div>}
 				</div>
 

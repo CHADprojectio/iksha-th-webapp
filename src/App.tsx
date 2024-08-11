@@ -6,6 +6,7 @@ import back from 'icons/back.png'
 import CartPage from './pages/cartPage/CartPage'
 import { useEffect, useState } from 'react'
 import ErrorPage from './pages/errorPage/ErrorPage'
+import { IconButton } from '@telegram-apps/telegram-ui'
 
 const App = () => {
 	const navigate = useNavigate()
@@ -28,21 +29,27 @@ const App = () => {
 	return (
 		<div className={`relative ${theme == 'dark' ? 'dark' : 'light'}`}>
 			<div className='fixed flex flex-col gap-3 z-[100] right-2 bottom-2'>
-				<div
+				<IconButton
 					onClick={toggleCartOpen}
-					className='p-2 rounded-full cursor-pointer bg-button bottom-5 w-[50px] h-[50px] '
+					className='w-[50px] rounded-full h-[50px] '
+					mode='bezeled'
+					size='l'
 				>
-					<img src={cart} alt='cart' />
-				</div>
+					{/* className='p-2 rounded-full cursor-pointer bg-button bottom-5 */}
 
-				<div
+					<img src={cart} alt='cart' />
+				</IconButton>
+
+				<IconButton
 					onClick={() => {
 						navigate('/')
 					}}
-					className='p-2 rounded-full cursor-pointer bg-button bottom-10 w-[50px] h-[50px] '
+					className='w-[50px] rounded-full h-[50px] '
+					mode='bezeled'
+					size='l'
 				>
 					<img src={back} alt='back' />
-				</div>
+				</IconButton>
 			</div>
 			{isCartOpen && <CartPage />}
 			<Routes>
