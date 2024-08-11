@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { getByType } from '../../firebase/firebase'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup'
+import { Text } from '@telegram-apps/telegram-ui'
 
 interface CatalogProps {}
 
@@ -51,7 +52,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 											src={item.photoUrl}
 											alt='https://th.bing.com/th/id/OIP.W9-vYFSiy6LSJEHFokqofwHaHa?rs=1&pid=ImgDetMain'
 										/>
-										<div>{item.title}</div>
+										<Text>{item.title}</Text>
 									</div>
 								)
 							})}
