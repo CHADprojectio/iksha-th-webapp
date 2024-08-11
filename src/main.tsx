@@ -5,11 +5,18 @@ import './index.css'
 
 import '@telegram-apps/telegram-ui/dist/styles.css'
 import { AppRoot } from '@telegram-apps/telegram-ui'
+import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { store } from 'store/store.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<AppRoot>
-			<App />
-		</AppRoot>
+		<BrowserRouter>
+			<AppRoot>
+				<Provider store={store}>
+					<App />
+				</Provider>
+			</AppRoot>
+		</BrowserRouter>
 	</React.StrictMode>
 )

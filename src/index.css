@@ -9,6 +9,8 @@ body {
 	line-height: 1.5;
 	font-weight: 400;
 
+	color: black;
+
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
@@ -19,4 +21,13 @@ body {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+}
+
+.popup_bg {
+	position: absolute;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(158, 158, 158, 0.659);
+	z-index: 100;
 }
