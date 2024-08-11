@@ -34,13 +34,13 @@ const MainPage = () => {
 	}, [])
 
 	return (
-		<main>
+		<main className='bg-bg min-h-[100vh]'>
 			{name != '' && <div>Привет {name}!</div>}
 			<div className='grid w-screen grid-cols-1 gap-4 p-5'>
 				{types.map((type, index) => (
 					<div
 						key={index}
-						className='relative text-black z-0 h-[300px] cursor-pointer'
+						className='relative text-p z-0 h-[300px] cursor-pointer'
 						onClick={() => {
 							navigate(`/catalog?type=${type.type}`)
 						}}

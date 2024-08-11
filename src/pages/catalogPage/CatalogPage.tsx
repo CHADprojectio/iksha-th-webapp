@@ -27,13 +27,13 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	}
 
 	return (
-		<main className='relative'>
+		<main className='relative min-h-[100vh] bg-bg text-p'>
 			<ItemDetailsPopup
 				isItemDetailsPopupOpen={isItemDetailsPopupOpen}
 				toggleItemDetailsPopup={toggleItemDetailsPopup}
 				item={currentItem}
 			/>
-			<div className='relative text-black'>
+			<div className='relative '>
 				<div className=''>
 					{type != undefined ? (
 						<div className='grid grid-cols-2 gap-4 p-5'>

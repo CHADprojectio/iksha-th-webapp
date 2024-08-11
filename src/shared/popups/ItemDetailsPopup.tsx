@@ -62,9 +62,11 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 
 	return (
 		<div className='flex items-center justify-center popup_bg'>
-			<div className='w-[90vw] overflow-y-scroll rounded-md p-5 text-black bg-[#fafafa] h-[90vh] shadow-2xl'>
+			<div className='w-[90vw] overflow-y-scroll rounded-md p-5 text-p bg-bg h-[90vh] shadow-2xl'>
 				<div className='flex items-center justify-between'>
-					<h2 className='font-semibold text-[25px]'>{item.title}</h2>
+					<h2 className='font-semibold text-h1 text-[25px]'>
+						{item.title}
+					</h2>
 					<IconButton
 						mode='plain'
 						size='s'
@@ -79,7 +81,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 				</div>
 
 				<img className='rounded-lg' src={item.photoUrl} alt={item.title} />
-				<div className='mt-2 mb-4 font-light text-slate-600'>
+				<div className='mt-2 mb-4 font-light text-p'>
 					{item.description}
 				</div>
 				<div className='flex justify-between'>
