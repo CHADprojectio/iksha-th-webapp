@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { getByType } from '../../firebase/firebase'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup'
-import { Section, Text } from '@telegram-apps/telegram-ui'
+import { Text } from '@telegram-apps/telegram-ui'
 
 interface CatalogProps {}
 

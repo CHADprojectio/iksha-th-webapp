@@ -1,8 +1,7 @@
 import {
 	Button,
-	Caption,
-	Headline,
 	IconButton,
+	IconContainer,
 	LargeTitle,
 	Subheadline,
 	Text,
@@ -96,7 +95,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 					<Button onClick={handleCartButtonClick}>
 						{isItemInCart ? 'удалить из корзины' : 'добавить в корзину'}
 					</Button>
-
+					<IconContainer></IconContainer>
 					{item.isStackable && isItemInCart && (
 						<div className='flex items-center'>
 							<div
