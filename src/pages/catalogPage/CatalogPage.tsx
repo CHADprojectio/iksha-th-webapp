@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { getByType } from '../../firebase/firebase'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup'
-import { Text } from '@telegram-apps/telegram-ui'
+import { Section, Text } from '@telegram-apps/telegram-ui'
 
 interface CatalogProps {}
 
@@ -27,7 +27,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	}
 
 	return (
-		<main className='relative min-h-[100vh] bg-bg text-p'>
+		<div className='relative min-h-[100vh] bg-bg text-p'>
 			<ItemDetailsPopup
 				isItemDetailsPopupOpen={isItemDetailsPopupOpen}
 				toggleItemDetailsPopup={toggleItemDetailsPopup}
@@ -62,7 +62,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 					)}
 				</div>
 			</div>
-		</main>
+		</div>
 	)
 }
 

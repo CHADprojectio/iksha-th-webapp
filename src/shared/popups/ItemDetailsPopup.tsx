@@ -3,6 +3,9 @@ import {
 	Caption,
 	Headline,
 	IconButton,
+	LargeTitle,
+	Subheadline,
+	Text,
 } from '@telegram-apps/telegram-ui'
 import IDatabaseItem from 'interfaces/IDatabaseItem'
 import React, { useState, useEffect } from 'react'
@@ -69,9 +72,9 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 		<div className='flex items-center justify-center popup_bg'>
 			<div className='w-[90vw] overflow-y-scroll rounded-md p-5 text-p bg-bg h-[90vh] shadow-2xl'>
 				<div className='flex items-center justify-between'>
-					<Headline weight='2' className='font-semibold '>
+					<LargeTitle weight='2' className='font-semibold '>
 						{item.title}
-					</Headline>
+					</LargeTitle>
 					<IconButton
 						mode='plain'
 						size='s'
@@ -80,25 +83,35 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 						close
 					</IconButton>
 				</div>
-				<div className='flex gap-2 mb-3'>
-					<Caption level='1'>{item.price}р</Caption>
+				<Text className='flex gap-1 mb-3'>
+					{item.price}р
 					{item.paymentDescription && <div>{item.paymentDescription}</div>}
-				</div>
+				</Text>
 
 				<img className='rounded-lg' src={item.photoUrl} alt={item.title} />
-				<div className='mt-2 mb-4 font-light text-p'>
+				<Subheadline className='mt-2 mb-4 font-light'>
 					{item.description}
-				</div>
-				<div className='flex justify-between'>
+				</Subheadline>
+				<div className='flex justify-between mt-3'>
 					<Button onClick={handleCartButtonClick}>
 						{isItemInCart ? 'удалить из корзины' : 'добавить в корзину'}
 					</Button>
 
 					{item.isStackable && isItemInCart && (
 						<div className='flex items-center'>
-							<Button onClick={handleDecrement}>-</Button>
+							<div
+								className='px-4 py-2 rounded-full text-h1 bg-button '
+								onClick={handleDecrement}
+							>
+								-
+							</div>
 							<div className='mx-2'>{isItemInCartCheck?.quantity}</div>
-							<Button onClick={handleIncrement}>+</Button>
+							<div
+								className='px-4 py-2 rounded-full text-h1 bg-button '
+								onClick={handleIncrement}
+							>
+								+
+							</div>
 						</div>
 					)}
 				</div>
