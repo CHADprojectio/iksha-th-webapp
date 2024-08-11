@@ -24,10 +24,19 @@ body {
 }
 
 .popup_bg {
-	position: absolute;
+	position: fixed;
 	inset: 0;
 	width: 100vw;
-	height: 100vh;
+	height: 100%;
+	min-height: 100vh;
 	background-color: rgba(158, 158, 158, 0.659);
 	z-index: 100;
+}
+.gradient_blue {
+	background: rgb(235, 235, 235);
+	background: linear-gradient(
+		62deg,
+		rgba(235, 235, 235, 1) 39%,
+		rgba(41, 144, 255, 1) 85%
+	);
 }

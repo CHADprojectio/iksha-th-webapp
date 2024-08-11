@@ -73,13 +73,13 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 						close
 					</IconButton>
 				</div>
-				<div className='flex gap-2'>
-					<div>{item.price}</div>
+				<div className='flex gap-2 mb-3'>
+					<div>{item.price}р</div>
 					{item.paymentDescription && <div>{item.paymentDescription}</div>}
 				</div>
 
 				<img className='rounded-lg' src={item.photoUrl} alt={item.title} />
-				<div className='mt-4 font-light text-slate-600'>
+				<div className='mt-2 mb-4 font-light text-slate-600'>
 					{item.description}
 				</div>
 				<div className='flex justify-between'>

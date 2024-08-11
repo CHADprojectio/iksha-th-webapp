@@ -22,6 +22,7 @@
 		"paths": {
 			"interfaces/*": ["src/interfaces/*"],
 			"public/*": ["public/*"],
+			"icons/*": ["public/icons/*"],
 			"store/*": ["src/store/*"],
 			"common/*": ["src/common/*"],
 			"shared/*": ["src/shared/*"]

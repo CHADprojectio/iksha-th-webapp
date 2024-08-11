@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { getByType } from '../../firebase/firebase'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup'
@@ -8,7 +8,6 @@ interface CatalogProps {}
 
 const CatalogPage: React.FC<CatalogProps> = () => {
 	const location = useLocation()
-	const navigate = useNavigate()
 	const [items, setItems] = useState<IDatabaseItem[]>([])
 	const [currentItem, setCurrentItem] = useState<IDatabaseItem | undefined>(
 		undefined
@@ -34,17 +33,9 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 				item={currentItem}
 			/>
 			<div className='relative text-black'>
-				<div
-					onClick={() => {
-						navigate('/')
-					}}
-					className='fixed top-5 right-5'
-				>
-					back
-				</div>
 				<div className=''>
 					{type != undefined ? (
-						<div className='grid grid-cols-2 gap-4 p-5 mt-8'>
+						<div className='grid grid-cols-2 gap-4 p-5'>
 							{items.map((item, i) => {
 								return (
 									<div
