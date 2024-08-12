@@ -24,7 +24,6 @@ const MainPage = () => {
 	useEffect(() => {
 		if (window.Telegram?.WebApp) {
 			const tg = window.Telegram.WebApp
-			console.log(tg?.initDataUnsafe?.user?.username)
 			if (tg?.initDataUnsafe?.user?.username)
 				setName(tg?.initDataUnsafe?.user?.username)
 			// You can also initialize or interact with tg here
@@ -35,7 +34,7 @@ const MainPage = () => {
 
 	return (
 		<main className='bg-bg min-h-[100vh]'>
-			<h1 className='text-center mt-[50px] font-semibold text-h1 text-[20px]'>
+			<h1 className='text-center pt-[50px] font-semibold text-h1 text-[20px]'>
 				{name != '' && (
 					<div>
 						Привет {name}!<br />

@@ -1,12 +1,15 @@
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import MainPage from './pages/mainPage/MainPage'
-import CatalogPage from './pages/catalogPage/CatalogPage'
+
 import cart from 'icons/cart.png'
 import back from 'icons/back.png'
 import CartPage from './pages/cartPage/CartPage'
-import { useEffect, useState } from 'react'
-import ErrorPage from './pages/errorPage/ErrorPage'
+import { lazy, useEffect, useState } from 'react'
 import { IconButton } from '@telegram-apps/telegram-ui'
+
+const ErrorPage = lazy(() => import('./pages/errorPage/ErrorPage'))
+const CatalogPage = lazy(() => import('./pages/catalogPage/CatalogPage'))
+const MainPage = lazy(() => import('./pages/mainPage/MainPage'))
+const CheckoutPage = lazy(() => import('./pages/checkoutPage/CheckoutPage'))
 
 const App = () => {
 	const navigate = useNavigate()
@@ -52,10 +55,11 @@ const App = () => {
 					<img src={cart} alt='cart' />
 				</IconButton>
 			</div>
-			{isCartOpen && <CartPage />}
+			{isCartOpen && <CartPage toggleCartOpen={toggleCartOpen} />}
 			<Routes>
 				<Route element={<MainPage />} path='/' />
 				<Route element={<CatalogPage />} path='/catalog' />
+				<Route element={<CheckoutPage />} path='/checkout' />
 				<Route element={<ErrorPage />} path='*' />
 			</Routes>
 		</div>

@@ -3,10 +3,13 @@ import React from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { removeFromCart } from 'store/slices/cartSlice'
 import close from 'icons/close.png'
+import { useNavigate } from 'react-router-dom'
 
-interface CartPageProps {}
+interface CartPageProps {
+	toggleCartOpen: () => void
+}
 
-const CartPage: React.FC<CartPageProps> = () => {
+const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 	const cart = useAppSelector(state => state.cart.cart)
 
 	const summary = cart.reduce(
@@ -15,6 +18,7 @@ const CartPage: React.FC<CartPageProps> = () => {
 	)
 
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 	return (
 		<div className='fixed inset-0 z-10 w-screen h-screen p-2 text-p bg-bg'>
 			<h1 className='text-[25px] text-h1 mb-4'>Корзина</h1>
@@ -48,7 +52,14 @@ const CartPage: React.FC<CartPageProps> = () => {
 						})}
 					</div>
 					<div></div>
-					<Button onClick={() => {}}>Оплатить {summary}р</Button>
+					<Button
+						onClick={() => {
+							navigate('/checkout')
+							toggleCartOpen()
+						}}
+					>
+						Оплатить {summary}р
+					</Button>
 				</div>
 			)}{' '}
 		</div>

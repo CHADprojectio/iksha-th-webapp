@@ -53,7 +53,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 								{data.map((item, i) => {
 									return (
 										<div
-											className='w-[40vw] h-[200px] rounded-[40px]'
+											className='w-[40vw] cursor-pointer h-[200px] rounded-[40px]'
 											onClick={() => {
 												setCurrentItem(item)
 												toggleItemDetailsPopup()
