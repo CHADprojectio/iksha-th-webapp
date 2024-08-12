@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup'
-import { Pagination, Text } from '@telegram-apps/telegram-ui'
+import { Pagination, Section, Text } from '@telegram-apps/telegram-ui'
 import { useDatabaseItemsFetch } from 'src/hooks/useDatabaseItemsFetch'
 import LoadingComponent from 'shared/LoadingComponent'
 
@@ -42,49 +42,51 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 				toggleItemDetailsPopup={toggleItemDetailsPopup}
 				item={currentItem}
 			/>
-			<div className='relative p-5 '>
-				<div className='text-[40px] text-h1 mb-5'>
-					{type == 'food' ? 'Еда' : 'Услуги'}
-				</div>
-				<div className=''>
-					{type != undefined && data != null ? (
-						<div>
-							<div className='grid grid-cols-2 gap-4 '>
-								{data.map((item, i) => {
-									return (
-										<div
-											className='w-[40vw] cursor-pointer h-[200px] rounded-[40px]'
-											onClick={() => {
-												setCurrentItem(item)
-												toggleItemDetailsPopup()
-											}}
-											key={i}
-										>
-											<img
-												className='object-cover w-full h-full'
-												src={item.photoUrl}
-												alt='https://th.bing.com/th/id/OIP.W9-vYFSiy6LSJEHFokqofwHaHa?rs=1&pid=ImgDetMain'
-											/>
-											<Text>{item.title}</Text>
-										</div>
-									)
-								})}
+			<Section>
+				<div className='relative p-5 '>
+					<div className='text-[40px] text-h1 mb-5'>
+						{type == 'food' ? 'Еда' : 'Услуги'}
+					</div>
+					<div className=''>
+						{type != undefined && data != null ? (
+							<div>
+								<div className='grid grid-cols-2 gap-4 '>
+									{data.map((item, i) => {
+										return (
+											<div
+												className='w-[40vw] cursor-pointer h-[200px] rounded-[40px]'
+												onClick={() => {
+													setCurrentItem(item)
+													toggleItemDetailsPopup()
+												}}
+												key={i}
+											>
+												<img
+													className='object-cover w-full h-full'
+													src={item.photoUrl}
+													alt='https://th.bing.com/th/id/OIP.W9-vYFSiy6LSJEHFokqofwHaHa?rs=1&pid=ImgDetMain'
+												/>
+												<Text>{item.title}</Text>
+											</div>
+										)
+									})}
+								</div>
+								<div className='flex mt-[40px] items-center justify-center w-full'>
+									<Pagination
+										onChange={(_, page) => {
+											setCurrentPage(page)
+										}}
+										page={currentPage}
+										count={pages || 1}
+									/>
+								</div>
 							</div>
-							<div className='flex mt-[40px] items-center justify-center w-full'>
-								<Pagination
-									onChange={(_, page) => {
-										setCurrentPage(page)
-									}}
-									page={currentPage}
-									count={pages || 1}
-								/>
-							</div>
-						</div>
-					) : (
-						<div></div>
-					)}
+						) : (
+							<div></div>
+						)}
+					</div>
 				</div>
-			</div>
+			</Section>
 		</div>
 	)
 }
