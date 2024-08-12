@@ -4,13 +4,22 @@ interface FetchResult<T> {
 	data: T[] | null
 	loading: boolean
 	error: string | null
+	pages: number | null
+}
+
+interface IState<T> {
+	data: T[] | null
+	pages: number | null
 }
 
 export const useFetch = <T>(
 	type: string | null,
 	page: number
 ): FetchResult<T> => {
-	const [data, setData] = useState<T[] | null>([])
+	const [state, setState] = useState<IState<T>>({
+		data: null,
+		pages: null,
+	})
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
 	const PAGE_SIZE = 10
@@ -36,20 +45,34 @@ export const useFetch = <T>(
 					throw new Error(`Failed to fetch data: ${res.statusText}`)
 				}
 
-				const result: T[] = await res.json()
-				setData(result)
+				const result: { data: T[]; pages: number } = await res.json()
+
+				setState({
+					data: result.data,
+					pages: result.pages,
+				})
 			} catch (error) {
 				setError(
 					error instanceof Error ? error.message : 'Unknown error occurred'
 				)
-				setData(null) // Clear data if there's an error
+				setState({
+					data: null,
+					pages: null,
+				})
 			} finally {
 				setLoading(false)
 			}
 		}
 
-		fetchData()
+		if (type) {
+			fetchData()
+		}
 	}, [type, page])
 
-	return { data, loading, error }
+	return {
+		data: state.data,
+		loading,
+		error,
+		pages: state.pages,
+	}
 }
