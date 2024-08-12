@@ -51,7 +51,10 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	}, [cart])
 
 	return (
-		<div className='relative p-1 text-p'>
+		<div
+			style={{ background: 'var(--tgui--secondary_bg_color)' }}
+			className='relative min-h-screen p-2 text-p'
+		>
 			<Section>
 				<div className='p-3'>
 					<div className='mb-5 font-semibold text-[20px]'>
