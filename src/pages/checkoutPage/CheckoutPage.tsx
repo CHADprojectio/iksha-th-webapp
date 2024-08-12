@@ -1,4 +1,4 @@
-import { Button, Input, List } from '@telegram-apps/telegram-ui'
+import { Button, Input, Section } from '@telegram-apps/telegram-ui'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from 'store/hooks'
@@ -51,37 +51,41 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	}, [cart])
 
 	return (
-		<div className='relative p-5 text-p'>
-			<div className='mb-5 font-semibold text-[20px]'>
-				Введите свои данные
-			</div>
-			<List>
-				<Input
-					header={errors.name ? errors.name : 'Имя'}
-					placeholder='Имя'
-					value={name}
-					onChange={e => setName(e.target.value)}
-					status={errors.name ? 'error' : 'default'} // Visual state
-					before={<span>👤</span>} // Icon before inpu
-					disabled={isDisabled} // Disable if needed
-				/>
-				<Input
-					header={errors.phone ? errors.phone : 'Номер телефона'}
-					placeholder='пример:+7 912 345 67 89'
-					value={phone}
-					onChange={e => setPhone(e.target.value)}
-					status={errors.phone ? 'error' : 'default'} // Visual state
-					before={<span>📞</span>} // Icon before input
-					disabled={isDisabled} // Disable if needed
-				/>
-				<Button
-					className='w-full'
-					onClick={handleSubmit}
-					disabled={isDisabled}
-				>
-					Дальше
-				</Button>
-			</List>
+		<div className='relative p-1 text-p'>
+			<Section>
+				<div className='p-3'>
+					<div className='mb-5 font-semibold text-[20px]'>
+						Введите свои данные
+					</div>
+					<form onSubmit={handleSubmit}>
+						<Input
+							header={errors.name ? errors.name : 'Имя'}
+							placeholder='Имя'
+							value={name}
+							onChange={e => setName(e.target.value)}
+							status={errors.name ? 'error' : 'default'} // Visual state
+							before={<span>👤</span>} // Icon before inpu
+							disabled={isDisabled} // Disable if needed
+						/>
+						<Input
+							header={errors.phone ? errors.phone : 'Номер телефона'}
+							placeholder='пример:+7 912 345 67 89'
+							value={phone}
+							onChange={e => setPhone(e.target.value)}
+							status={errors.phone ? 'error' : 'default'} // Visual state
+							before={<span>📞</span>} // Icon before input
+							disabled={isDisabled} // Disable if needed
+						/>
+						<Button
+							className='w-full'
+							type='submit'
+							disabled={isDisabled}
+						>
+							Дальше
+						</Button>
+					</form>
+				</div>
+			</Section>
 		</div>
 	)
 }
