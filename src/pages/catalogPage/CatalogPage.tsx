@@ -12,7 +12,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	const [currentItem, setCurrentItem] = useState<IDatabaseItem | undefined>(
 		undefined
 	)
-	const [currentPage, setCurrentPage] = useState(1)
+	const [currentPage] = useState(1)
 	const queryParams = new URLSearchParams(location.search)
 	const type = queryParams.get('type')
 
