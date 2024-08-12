@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from 'store/hooks'
 
-interface CheckoutPageProps {
-	toggleCartOpen: () => void
-}
+interface CheckoutPageProps {}
 
 const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const cart = useAppSelector(state => state.cart.cart)
