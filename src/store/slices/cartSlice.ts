@@ -86,7 +86,6 @@ export const cartSlice = createSlice({
 				)
 			}
 		},
-
 		// Action to remove an item from the cart by title
 		removeFromCart: (state, action: PayloadAction<{ title: string }>) => {
 			state.cart = state.cart.filter(

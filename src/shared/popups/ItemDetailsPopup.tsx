@@ -81,7 +81,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 					<IconButton
 						mode='bezeled'
 						size='s'
-						className='flex w-[30px] justify-center items-center h-[30px]'
+						className='flex w-[40px] justify-center items-center h-[40px]'
 						// style={{ width: '40px', height: '40px' }}
 						onClick={toggleItemDetailsPopup}
 					>

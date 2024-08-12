@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup'
-import { Pagination, Spinner, Text } from '@telegram-apps/telegram-ui'
+import { Pagination, Text } from '@telegram-apps/telegram-ui'
 import { useFetch } from 'src/hooks/useFetch'
+import LoadingComponent from 'shared/LoadingComponent'
 
 interface CatalogProps {}
 
@@ -26,12 +27,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 		setIsItemDetailsPopup(!isItemDetailsPopupOpen)
 	}
 
-	if (loading)
-		return (
-			<div className='flex items-center justify-center w-screen h-screen'>
-				<Spinner size='l' />
-			</div>
-		)
+	if (loading) return <LoadingComponent />
 	if (error) {
 		return (
 			<div>

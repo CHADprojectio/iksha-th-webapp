@@ -30,6 +30,18 @@ const App = () => {
 		<div className={`relative ${theme == 'dark' ? 'dark' : 'light'}`}>
 			<div className='fixed flex flex-col gap-3 z-[100] right-2 bottom-2'>
 				<IconButton
+					onClick={() => {
+						navigate('/')
+						setIsCartOpen(false)
+					}}
+					className='w-[50px] rounded-full h-[50px] '
+					mode='bezeled'
+					size='l'
+				>
+					<img src={back} alt='back' />
+				</IconButton>
+
+				<IconButton
 					onClick={toggleCartOpen}
 					className='w-[50px] rounded-full h-[50px] '
 					mode='bezeled'
@@ -38,17 +50,6 @@ const App = () => {
 					{/* className='p-2 rounded-full cursor-pointer bg-button bottom-5 */}
 
 					<img src={cart} alt='cart' />
-				</IconButton>
-
-				<IconButton
-					onClick={() => {
-						navigate('/')
-					}}
-					className='w-[50px] rounded-full h-[50px] '
-					mode='bezeled'
-					size='l'
-				>
-					<img src={back} alt='back' />
 				</IconButton>
 			</div>
 			{isCartOpen && <CartPage />}
