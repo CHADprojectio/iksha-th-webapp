@@ -36,7 +36,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 		)
 	}
 	return (
-		<div className='relative min-h-[100vh] bg-bg text-p'>
+		<div className='relative min-h-[100vh] bg-bg p-1 text-p'>
 			<ItemDetailsPopup
 				isItemDetailsPopupOpen={isItemDetailsPopupOpen}
 				toggleItemDetailsPopup={toggleItemDetailsPopup}
