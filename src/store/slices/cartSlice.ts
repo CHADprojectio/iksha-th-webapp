@@ -1,12 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import ICartItem from 'interfaces/ICartItem'
 import IDatabaseItem from 'interfaces/IDatabaseItem'
-
-interface ICartItem {
-	title: string
-	price: number
-	quantity: number
-}
 
 // Define a type for the slice state
 interface CartState {

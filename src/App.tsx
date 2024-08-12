@@ -10,6 +10,8 @@ const ErrorPage = lazy(() => import('./pages/errorPage/ErrorPage'))
 const CatalogPage = lazy(() => import('./pages/catalogPage/CatalogPage'))
 const MainPage = lazy(() => import('./pages/mainPage/MainPage'))
 const CheckoutPage = lazy(() => import('./pages/checkoutPage/CheckoutPage'))
+const SuccessPage = lazy(() => import('./pages/successPage/SuccessPage'))
+const FailurePage = lazy(() => import('./pages/failurePage/FailurePage'))
 
 const App = () => {
 	const navigate = useNavigate()
@@ -60,6 +62,8 @@ const App = () => {
 				<Route element={<MainPage />} path='/' />
 				<Route element={<CatalogPage />} path='/catalog' />
 				<Route element={<CheckoutPage />} path='/checkout' />
+				<Route element={<SuccessPage />} path='/success' />
+				<Route element={<FailurePage />} path='/failure' />
 				<Route element={<ErrorPage />} path='*' />
 			</Routes>
 		</div>

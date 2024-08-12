@@ -14,6 +14,8 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const [errors, setErrors] = useState<{ name?: string; phone?: string }>({})
 	const [isDisabled] = useState<boolean>(false)
 
+	const [isConclusionOpen, setIsConclusionOpen] = useState(false)
+
 	const validate = () => {
 		let valid = true
 		const errors: { name?: string; phone?: string } = {}
@@ -39,10 +41,66 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const handleSubmit = () => {
 		if (validate()) {
 			// Proceed to the next step if valid
+			setIsConclusionOpen(true)
 			console.log('Form is valid, proceed to the next step')
 			// Add logic to move to the next step or submit the form
 		} else {
 			console.log('Form is invalid, please correct the errors')
+		}
+	}
+	const redirect = (link: string) => {
+		window.location.replace(link)
+	}
+
+	interface ISendCartItem {
+		quantity: number
+		name: string
+		price: number
+	}
+
+	const processPayment = async () => {
+		const sendCart: ISendCartItem[] = cart.map(item => ({
+			quantity: item.quantity,
+			price: item.price,
+			name: item.title,
+		}))
+
+		try {
+			const res = await fetch(`${import.meta.env.VITE_API_URL}payment/pay`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					name: name.trim(),
+					phone: phone.trim(),
+					cart: sendCart,
+				}),
+			})
+
+			if (res.ok) {
+				const contentType = res.headers.get('Content-Type')
+
+				if (contentType && contentType.includes('application/json')) {
+					// If the response is JSON, parse it
+					const data = await res.json()
+					redirect(data.paymentUrl) // Adjust this if your JSON structure is different
+				} else {
+					// If the response is plain text, treat it as a URL
+					const paymentUrl = await res.text()
+					redirect(paymentUrl)
+				}
+			} else {
+				// Handle non-200 responses
+				const errorData = await res.text() // Assuming error messages could also be plain text
+				console.error('Payment failed:', errorData)
+				alert('Payment failed. Please try again.')
+			}
+		} catch (error) {
+			console.error('Error processing payment:', error)
+			alert(
+				'An error occurred while processing the payment. Please try again.'
+			)
 		}
 	}
 
@@ -53,14 +111,19 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	return (
 		<div
 			style={{ background: 'var(--tgui--secondary_bg_color)' }}
-			className='relative min-h-screen p-2 text-p'
+			className='relative flex flex-col min-h-screen gap-[20px] p-[10px] text-p'
 		>
 			<Section>
 				<div className='p-3'>
 					<div className='mb-5 font-semibold text-[20px]'>
 						Введите свои данные
 					</div>
-					<form onSubmit={handleSubmit}>
+					<form
+						onSubmit={e => {
+							e.preventDefault()
+							handleSubmit()
+						}}
+					>
 						<Input
 							header={errors.name ? errors.name : 'Имя'}
 							placeholder='Имя'
@@ -89,6 +152,20 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 					</form>
 				</div>
 			</Section>
+			{isConclusionOpen && (
+				<Section>
+					<div className='p-3'>
+						<Button
+							onClick={async () => {
+								await processPayment()
+							}}
+							className='w-full'
+						>
+							Оплатить
+						</Button>
+					</div>
+				</Section>
+			)}
 		</div>
 	)
 }
