@@ -15,6 +15,9 @@ import {
 	decrementQuantity, // Import decrement action
 	removeFromCart,
 } from 'store/slices/cartSlice'
+import close from 'icons/close.png'
+import plus from 'icons/plus.png'
+import minus from 'icons/minus.png'
 
 interface ItemDetailsPopupProps {
 	item: IDatabaseItem | undefined
@@ -74,12 +77,15 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 					<LargeTitle weight='2' className='font-semibold '>
 						{item.title}
 					</LargeTitle>
+
 					<IconButton
-						mode='plain'
+						mode='bezeled'
 						size='s'
+						className='flex w-[30px] justify-center items-center h-[30px]'
+						// style={{ width: '40px', height: '40px' }}
 						onClick={toggleItemDetailsPopup}
 					>
-						close
+						<img src={close} alt='' />
 					</IconButton>
 				</div>
 				<Text className='flex gap-1 mb-3'>
@@ -98,21 +104,21 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 					<IconContainer></IconContainer>
 					{item.isStackable && isItemInCart && (
 						<div className='flex items-center'>
-							<Button
+							<IconButton
 								size='s'
-								className='px-4 py-2 rounded-full text-h1 bg-button '
+								className='px-4 py-2 w-[35px] h-[35px] rounded-full text-h1 bg-button '
 								onClick={handleDecrement}
 							>
-								-
-							</Button>
+								<img src={minus} alt='' />
+							</IconButton>
 							<div className='mx-2'>{isItemInCartCheck?.quantity}</div>
-							<Button
+							<IconButton
 								size='s'
-								className='px-4 py-2 rounded-full text-h1 bg-button '
+								className='px-4 py-2 rounded-full w-[35px] h-[35px] text-h1 bg-button '
 								onClick={handleIncrement}
 							>
-								+
-							</Button>
+								<img src={plus} alt='' />
+							</IconButton>
 						</div>
 					)}
 				</div>

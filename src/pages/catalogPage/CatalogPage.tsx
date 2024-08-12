@@ -47,7 +47,9 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 				item={currentItem}
 			/>
 			<div className='relative p-5 '>
-				<div className='text-[40px] text-h1 mb-5'>{type}</div>
+				<div className='text-[40px] text-h1 mb-5'>
+					{type == 'food' ? 'Еда' : 'Услуги'}
+				</div>
 				<div className=''>
 					{type != undefined && data != null ? (
 						<div>
@@ -72,7 +74,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 									)
 								})}
 							</div>
-							<div className='flex items-center justify-center w-full'>
+							<div className='flex mt-[40px] items-center justify-center w-full'>
 								<Pagination
 									onChange={(_, page) => {
 										setCurrentPage(page)
