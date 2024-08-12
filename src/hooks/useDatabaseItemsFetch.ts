@@ -12,7 +12,7 @@ interface IState<T> {
 	pages: number | null
 }
 
-export const useFetch = <T>(
+export const useDatabaseItemsFetch = <T>(
 	type: string | null,
 	page: number
 ): FetchResult<T> => {

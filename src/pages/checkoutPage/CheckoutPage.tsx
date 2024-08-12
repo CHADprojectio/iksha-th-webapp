@@ -51,7 +51,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	}, [cart])
 
 	return (
-		<div className='relative p-5 text-p bg-bg'>
+		<div className='relative p-5 text-p'>
 			<div className='mb-5 font-semibold text-[20px]'>
 				Введите свои данные
 			</div>
