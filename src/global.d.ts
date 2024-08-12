@@ -4,6 +4,7 @@ interface TelegramWebApp {
 	initDataUnsafe: any
 	close(): void
 	colorScheme: 'light' | 'dark'
+	WebAppChat: any
 	// Добавьте другие методы и свойства, если необходимо
 }
 

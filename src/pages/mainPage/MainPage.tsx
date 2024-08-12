@@ -21,12 +21,14 @@ const types: ITypeCard[] = [
 const MainPage = () => {
 	const navigate = useNavigate()
 	const [name, setName] = useState('')
+	const [id, setId] = useState('')
 	useEffect(() => {
 		if (window.Telegram?.WebApp) {
 			const tg = window.Telegram.WebApp
 			console.log(tg?.initDataUnsafe?.user?.username)
 			if (tg?.initDataUnsafe?.user?.username)
 				setName(tg?.initDataUnsafe?.user?.username)
+			if (tg?.WebAppChat?.id) setId(tg?.WebAppChat?.id)
 			// You can also initialize or interact with tg here
 		} else {
 			console.error('Telegram WebApp is not available')
@@ -36,6 +38,7 @@ const MainPage = () => {
 	return (
 		<main className='bg-bg min-h-[100vh]'>
 			{name != '' && <div>Привет {name}!</div>}
+			{id != '' && <div>Привет {id}!</div>}
 			<div className='grid w-screen grid-cols-1 gap-4 p-5'>
 				{types.map((type, index) => (
 					<div

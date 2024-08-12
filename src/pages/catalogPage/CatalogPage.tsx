@@ -1,31 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { getByType } from '../../firebase/firebase'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup'
-import { Text } from '@telegram-apps/telegram-ui'
+import { Pagination, Spinner, Text } from '@telegram-apps/telegram-ui'
+import { useFetch } from 'src/hooks/useFetch'
 
 interface CatalogProps {}
 
 const CatalogPage: React.FC<CatalogProps> = () => {
 	const location = useLocation()
-	const [items, setItems] = useState<IDatabaseItem[]>([])
 	const [currentItem, setCurrentItem] = useState<IDatabaseItem | undefined>(
 		undefined
 	)
+	const [currentPage, setCurrentPage] = useState(1)
 	const queryParams = new URLSearchParams(location.search)
 	const type = queryParams.get('type')
 
-	useEffect(() => {
-		if (type != undefined) getByType(type).then(res => setItems(res))
-	}, [type])
-	console.log(items)
+	const { data, loading } = useFetch<IDatabaseItem>(type, currentPage)
+
+	// useEffect(() => {
+	// 	if (type != undefined) getByType(type).then(res => setItems(res))
+	// }, [type])
+	// console.log(items)
 
 	const [isItemDetailsPopupOpen, setIsItemDetailsPopup] = useState(false)
 	const toggleItemDetailsPopup = () => {
 		setIsItemDetailsPopup(!isItemDetailsPopupOpen)
 	}
 
+	if (loading)
+		return (
+			<div className='flex items-center justify-center w-screen h-screen'>
+				<Spinner size='l' />
+			</div>
+		)
 	return (
 		<div className='relative min-h-[100vh] bg-bg text-p'>
 			<ItemDetailsPopup
@@ -35,9 +43,9 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 			/>
 			<div className='relative '>
 				<div className=''>
-					{type != undefined ? (
+					{type != undefined && data != null ? (
 						<div className='grid grid-cols-2 gap-4 p-5'>
-							{items.map((item, i) => {
+							{data.map((item, i) => {
 								return (
 									<div
 										className='w-[40vw] h-[200px] rounded-[40px]'
@@ -56,6 +64,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 									</div>
 								)
 							})}
+							<Pagination count={currentPage} />
 						</div>
 					) : (
 						<div></div>

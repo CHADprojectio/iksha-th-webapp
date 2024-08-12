@@ -98,19 +98,21 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 					<IconContainer></IconContainer>
 					{item.isStackable && isItemInCart && (
 						<div className='flex items-center'>
-							<div
+							<Button
+								size='s'
 								className='px-4 py-2 rounded-full text-h1 bg-button '
 								onClick={handleDecrement}
 							>
 								-
-							</div>
+							</Button>
 							<div className='mx-2'>{isItemInCartCheck?.quantity}</div>
-							<div
+							<Button
+								size='s'
 								className='px-4 py-2 rounded-full text-h1 bg-button '
 								onClick={handleIncrement}
 							>
 								+
-							</div>
+							</Button>
 						</div>
 					)}
 				</div>
@@ -120,3 +122,19 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 }
 
 export default ItemDetailsPopup
+{
+	/* <Input
+							type='number'
+							
+							header='Кол-во'
+							value={isItemInCartCheck?.quantity}
+							onChange={e => {
+								dispatch(
+									changeQuantity({
+										newQuantity: Number(e.target.value),
+										title: isItemInCartCheck?.title,
+									})
+								)
+							}}
+						/> */
+}

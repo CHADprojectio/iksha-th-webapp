@@ -37,7 +37,22 @@ export const cartSlice = createSlice({
 				})
 			}
 		},
+		changeQuantity: (
+			state,
+			action: PayloadAction<{
+				title: string | undefined
+				newQuantity: number
+			}>
+		) => {
+			if (!action.payload.title) return
 
+			const item = state.cart.find(
+				item => item.title === action.payload.title
+			)
+			if (item) {
+				item.quantity = action.payload.newQuantity
+			}
+		},
 		// Action to increment the quantity of an item in the cart
 		incrementQuantity: (
 			state,
@@ -87,6 +102,7 @@ export const {
 	incrementQuantity,
 	decrementQuantity,
 	removeFromCart,
+	changeQuantity,
 } = cartSlice.actions
 
 // Export reducer
