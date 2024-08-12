@@ -34,7 +34,7 @@ const MainPage = () => {
 
 	return (
 		<main className='bg-bg min-h-[100vh]'>
-			<h1 className='text-center pt-[50px] font-semibold text-h1 text-[20px]'>
+			<h1 className='pt-[50px] font-semibold text-h1 text-[20px]'>
 				{name != '' && (
 					<div>
 						Привет {name}!<br />
