@@ -50,7 +50,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 					<div className=''>
 						{type != undefined && data != null ? (
 							<div>
-								<div className='grid grid-cols-2 gap-4 '>
+								<div className='grid grid-cols-2 gap-4 gap-y-[30px] '>
 									{data.map((item, i) => {
 										return (
 											<div
@@ -71,8 +71,11 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 										)
 									})}
 								</div>
-								<div className='flex mt-[40px] items-center justify-center w-full'>
+								<div className='flex max-w-[90vw] mt-[100px] items-center justify-center w-full'>
 									<Pagination
+										hideNextButton={true}
+										hidePrevButton={true}
+										boundaryCount={1}
 										onChange={(_, page) => {
 											setCurrentPage(page)
 										}}

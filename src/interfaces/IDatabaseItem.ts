@@ -3,6 +3,8 @@ export default interface IDatabaseItem {
 	price: number
 	type: string
 	description?: string
+	variants?: string[]
+	priceVariants?: number[]
 	paymentDescription?: string
 	isStackable: boolean
 	photoUrl: string
