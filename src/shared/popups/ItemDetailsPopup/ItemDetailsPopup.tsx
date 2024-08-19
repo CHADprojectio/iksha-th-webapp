@@ -32,8 +32,8 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 }) => {
 	const cart = useAppSelector(state => state.cart.cart)
 	const dispatch = useAppDispatch()
-	const variants = item?.variants || []
-	const priceVariants = item?.priceVariants || []
+	const [variants, setVariants] = useState<string[]>([])
+	const [priceVariants, setPriceVariants] = useState<number[]>([])
 	const [currentVariant, setCurrentVariant] = useState(variants[0] || '')
 	const [currentPrice, setCurrentPrice] = useState<number | undefined>(
 		item?.price
@@ -41,6 +41,8 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 
 	useEffect(() => {
 		if (priceVariants.length > 0) setCurrentPrice(priceVariants[0])
+		setVariants(item?.variants || [])
+		setPriceVariants(item?.priceVariants || [])
 	}, [item])
 
 	useEffect(() => {
