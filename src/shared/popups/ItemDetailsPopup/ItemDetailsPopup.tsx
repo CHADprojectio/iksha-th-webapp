@@ -35,10 +35,10 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 	const variants = item?.variants || []
 	const priceVariants = item?.priceVariants || []
 	const [currentVariant, setCurrentVariant] = useState(variants[0] || '')
-	const [currentPrice, setCurrentPrice] = useState(item?.price)
+	const [currentPrice, setCurrentPrice] = useState<number>(item?.price ?? 0)
 
 	useEffect(() => {
-		if (priceVariants.length > 0) setCurrentPrice(priceVariants[0])
+		if (priceVariants.length > 0) setCurrentPrice(priceVariants[0] ?? 0)
 	}, [item])
 
 	useEffect(() => {
@@ -48,7 +48,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 			if (variantIndex !== -1 && priceVariants[variantIndex] !== undefined) {
 				setCurrentPrice(priceVariants[variantIndex])
 			} else {
-				setCurrentPrice(item?.price || 0)
+				setCurrentPrice(item?.price ?? 0)
 			}
 		}
 	}, [currentVariant, variants, priceVariants, item?.price])
