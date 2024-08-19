@@ -1,4 +1,4 @@
-import { Button, Divider } from '@telegram-apps/telegram-ui'
+import { Button, Divider, IconButton } from '@telegram-apps/telegram-ui'
 import React from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { removeFromCart } from 'store/slices/cartSlice'
@@ -27,17 +27,17 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 			<div className='flex justify-between'>
 				<h1 className='text-[25px] text-h1 mb-4'>Корзина</h1>
 
-				<div
-					// mode='bezeled'
-					// size='s'
-					className='flex w-[30px] justify-center items-center h-[30px]'
+				<IconButton
+					mode='bezeled'
+					size='s'
+					className='flex w-[35px] justify-center items-center h-[35px]'
 					// style={{ width: '40px', height: '40px' }}
 					onClick={() => {
 						toggleCartOpen()
 					}}
 				>
 					<img src={close} alt='' />
-				</div>
+				</IconButton>
 			</div>
 			{cart.length == 0 ? (
 				<div>В корзине пусто....</div>
@@ -60,10 +60,10 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 											<div className='flex flex-col w-full'>
 												<div className='flex justify-between items-center'>
 													<h2>{item.title}</h2>
-													<div
-														// mode='bezeled'
-														// size='s'
-														className='flex w-[20px] justify-center items-center h-[30px]'
+													<IconButton
+														mode='bezeled'
+														size='s'
+														className='flex w-[20px] justify-center items-center h-[20px]'
 														// style={{ width: '40px', height: '40px' }}
 														onClick={() => {
 															dispatch(
@@ -75,7 +75,7 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 														}}
 													>
 														<img src={close} alt='' />
-													</div>
+													</IconButton>
 												</div>
 												<div className='text-[12px]'>
 													{item.variant}
