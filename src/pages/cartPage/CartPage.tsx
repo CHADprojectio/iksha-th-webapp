@@ -44,7 +44,7 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 			) : (
 				<div className='flex flex-col'>
 					<div className='mb-[30px] '>
-						<div className='overflow-y-scroll flex flex-col gap-[30px] h-[70vh]'>
+						<div className='overflow-y-scroll flex flex-col gap-[40px] h-[70vh]'>
 							{cart.map((item, i) => {
 								return (
 									<div
@@ -83,7 +83,20 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 											</div>
 										</div>
 										<Divider />
-										<div className='text-[15px]'>{item.price}р</div>
+										<div className='flex mt-2 justify-between'>
+											<div className='flex gap-2'>
+												<div className='text-[15px]'>
+													{item.price}р
+												</div>
+												<div className='text-[15px]'>
+													x{item.quantity}
+												</div>
+											</div>
+
+											<div className='text-[15px]'>
+												{item.price * item.quantity}р
+											</div>
+										</div>
 									</div>
 								)
 							})}
