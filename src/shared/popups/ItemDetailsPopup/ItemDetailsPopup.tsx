@@ -104,8 +104,8 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 	)
 
 	return (
-		<div className='flex items-center justify-center popup_bg'>
-			<div className='w-screen h-screen overflow-y-scroll rounded-md p-5 text-p bg-bg shadow-2xl'>
+		<div className='flex items-center justify-center '>
+			<div className='overflow-y-scroll rounded-md p-5 text-p popup_bg bg-bg shadow-2xl'>
 				<div className='flex items-start justify-between'>
 					<IconButton
 						mode='bezeled'

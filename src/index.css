@@ -29,7 +29,7 @@ body {
 	width: 100vw;
 	height: 100vh;
 	min-height: 100vh;
-	background-color: rgba(158, 158, 158, 0.659);
+	background-color: var('--bg');
 	z-index: 100;
 }
 .gradient_blue {
