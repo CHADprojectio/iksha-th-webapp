@@ -35,9 +35,11 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 	const variants = item?.variants || []
 	const priceVariants = item?.priceVariants || []
 	const [currentVariant, setCurrentVariant] = useState(variants[0] || '')
-	const [currentPrice, setCurrentPrice] = useState(
-		item?.price || priceVariants[0]
-	)
+	const [currentPrice, setCurrentPrice] = useState(item?.price)
+
+	useEffect(() => {
+		if (priceVariants.length > 0) setCurrentPrice(priceVariants[0])
+	}, [item])
 
 	useEffect(() => {
 		// Update the price when the variant changes
