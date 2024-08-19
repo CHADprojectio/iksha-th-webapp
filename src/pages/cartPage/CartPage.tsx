@@ -20,7 +20,7 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 	return (
-		<div className='fixed inset-0 z-10 w-screen h-screen p-2 text-p bg-bg'>
+		<div className='popup_bg z-10 p-2 text-p bg-bg'>
 			<h1 className='text-[25px] text-h1 mb-4'>Корзина</h1>
 			{cart.length == 0 ? (
 				<div>В корзине пусто....</div>
