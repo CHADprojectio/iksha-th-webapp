@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import ICartItem from 'interfaces/ICartItem'
-import IDatabaseItem from 'interfaces/IDatabaseItem'
 
 // Define a type for the slice state
 interface CartState {
@@ -17,10 +16,11 @@ export const cartSlice = createSlice({
 	name: 'cart',
 	initialState,
 	reducers: {
-		// Action to add an item to the cart
-		addItemToCart: (state, action: PayloadAction<IDatabaseItem>) => {
+		addItemToCart: (state, action: PayloadAction<ICartItem>) => {
 			const existingItem = state.cart.find(
-				item => item.title === action.payload.title
+				item =>
+					item.title === action.payload.title &&
+					item.variant === action.payload.variant
 			)
 			if (existingItem) {
 				existingItem.quantity += 1
@@ -28,7 +28,8 @@ export const cartSlice = createSlice({
 				state.cart.push({
 					title: action.payload.title,
 					price: action.payload.price,
-					quantity: 1,
+					variant: action.payload.variant,
+					quantity: action.payload.quantity,
 				})
 			}
 		},
@@ -36,55 +37,65 @@ export const cartSlice = createSlice({
 			state,
 			action: PayloadAction<{
 				title: string | undefined
+				variant?: string
 				newQuantity: number
 			}>
 		) => {
 			if (!action.payload.title) return
 
 			const item = state.cart.find(
-				item => item.title === action.payload.title
+				item =>
+					item.title === action.payload.title &&
+					item.variant === action.payload.variant
 			)
 			if (item) {
 				item.quantity = action.payload.newQuantity
 			}
 		},
-		// Action to increment the quantity of an item in the cart
 		incrementQuantity: (
 			state,
-			action: PayloadAction<{ title: string | undefined }>
+			action: PayloadAction<{ title: string | undefined; variant?: string }>
 		) => {
 			if (!action.payload.title) return
 
 			const item = state.cart.find(
-				item => item.title === action.payload.title
+				item =>
+					item.title === action.payload.title &&
+					item.variant === action.payload.variant
 			)
 			if (item) {
 				item.quantity += 1
 			}
 		},
-
-		// Action to decrement the quantity of an item in the cart
 		decrementQuantity: (
 			state,
-			action: PayloadAction<{ title: string | undefined }>
+			action: PayloadAction<{ title: string | undefined; variant?: string }>
 		) => {
 			if (!action.payload.title) return
+
 			const item = state.cart.find(
-				item => item.title === action.payload.title
+				item =>
+					item.title === action.payload.title &&
+					item.variant === action.payload.variant
 			)
 			if (item && item.quantity > 1) {
 				item.quantity -= 1
 			} else if (item && item.quantity === 1) {
-				// Optionally, remove the item from the cart if quantity is 1 and decrement is triggered
 				state.cart = state.cart.filter(
-					cartItem => cartItem.title !== action.payload.title
+					cartItem =>
+						cartItem.title !== action.payload.title ||
+						cartItem.variant !== action.payload.variant
 				)
 			}
 		},
-		// Action to remove an item from the cart by title
-		removeFromCart: (state, action: PayloadAction<{ title: string }>) => {
+		removeFromCart: (
+			state,
+			action: PayloadAction<{ title: string; variant?: string }>
+		) => {
 			state.cart = state.cart.filter(
-				item => item.title !== action.payload.title
+				item =>
+					item.title !== action.payload.title ||
+					item.variant !== action.payload.variant
 			)
 		},
 	},

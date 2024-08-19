@@ -34,7 +34,7 @@ const MainPage = () => {
 
 	return (
 		<main className='bg-bg min-h-[100vh]'>
-			<h1 className='pt-[50px] font-semibold text-h1 text-[20px]'>
+			<h1 className='pt-[50px] p-2 font-semibold text-h1 text-[20px]'>
 				{name != '' && (
 					<div>
 						Привет {name}!<br />
@@ -43,7 +43,7 @@ const MainPage = () => {
 				В этом приложении вы можете себе заказать дополнительные услуги и
 				еду не выходя из телегармма!
 			</h1>
-			<div className='grid w-screen grid-cols-1 gap-4 p-5'>
+			<div className='grid p-2 w-screen grid-cols-1 gap-4 '>
 				{types.map((type, index) => (
 					<div
 						key={index}

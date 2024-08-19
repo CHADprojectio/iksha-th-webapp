@@ -17,7 +17,7 @@ const App = () => {
 	const navigate = useNavigate()
 	const [isCartOpen, setIsCartOpen] = useState(false)
 	const toggleCartOpen = () => setIsCartOpen(!isCartOpen)
-	const [theme, setTheme] = useState<'dark' | 'light'>('light')
+	const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
 	useEffect(() => {
 		if (window.Telegram?.WebApp) {

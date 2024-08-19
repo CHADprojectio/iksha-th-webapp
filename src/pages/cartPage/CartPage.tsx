@@ -39,12 +39,19 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 										className='flex w-[30px] justify-center items-center h-[30px]'
 										// style={{ width: '40px', height: '40px' }}
 										onClick={() => {
-											dispatch(removeFromCart({ title: item.title }))
+											dispatch(
+												removeFromCart({
+													variant: item.variant,
+													title: item.title,
+												})
+											)
 										}}
 									>
 										<img src={close} alt='' />
 									</IconButton>
-									<div>{item.title}</div>
+									<div>
+										{item.title} {item.variant}
+									</div>
 									<div className='text-[15px]'>x{item.quantity}</div>
 									<div className='text-[15px]'>{item.price}р</div>
 								</div>

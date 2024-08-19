@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
-import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup'
-import { Pagination, Section, Text } from '@telegram-apps/telegram-ui'
+import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup/ItemDetailsPopup'
+import { Pagination, Section } from '@telegram-apps/telegram-ui'
 import { useDatabaseItemsFetch } from 'src/hooks/useDatabaseItemsFetch'
 import LoadingComponent from 'shared/LoadingComponent'
 
@@ -50,11 +50,11 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 					<div className=''>
 						{type != undefined && data != null ? (
 							<div>
-								<div className='grid grid-cols-2 gap-4 gap-y-[30px] '>
+								<div className='gap-4 flex flex-col gap-y-[30px] '>
 									{data.map((item, i) => {
 										return (
 											<div
-												className='w-[40vw] cursor-pointer h-[200px] rounded-[40px]'
+												className='w-full flex gap-2 cursor-pointer rounded-[40px]'
 												onClick={() => {
 													setCurrentItem(item)
 													toggleItemDetailsPopup()
@@ -62,20 +62,28 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 												key={i}
 											>
 												<img
-													className='object-cover w-full h-full'
+													className='object-cover h-[128px] w-[128px]'
 													src={item.photoUrl}
 													alt='https://th.bing.com/th/id/OIP.W9-vYFSiy6LSJEHFokqofwHaHa?rs=1&pid=ImgDetMain'
 												/>
-												<Text>{item.title}</Text>
+												<div className='flex w-full flex-col'>
+													<div className='w-full font-semibold text-h1'>
+														{item.title}
+													</div>
+													<div className='text-p'>
+														от {item.price} руб
+													</div>
+												</div>
 											</div>
 										)
 									})}
 								</div>
-								<div className='flex max-w-[90vw] mt-[100px] items-center justify-center w-full'>
+								<div className='flex w-[80vw] mt-[100px] items-center justify-center'>
 									<Pagination
 										hideNextButton={true}
 										hidePrevButton={true}
 										boundaryCount={1}
+										siblingCount={1}
 										onChange={(_, page) => {
 											setCurrentPage(page)
 										}}
