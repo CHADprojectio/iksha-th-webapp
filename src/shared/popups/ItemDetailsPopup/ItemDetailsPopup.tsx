@@ -122,7 +122,6 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 				<Subheadline className='mt-2 mb-4 font-light'>
 					{item.description}
 				</Subheadline>
-				<div>{currentVariant}</div>
 				{variants.length > 0 && (
 					<div className='select_container mt-4'>
 						<Select
