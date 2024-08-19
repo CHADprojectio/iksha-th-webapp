@@ -3,4 +3,5 @@ export default interface ICartItem {
 	price: number
 	quantity: number
 	variant?: string
+	photoUrl: string
 }

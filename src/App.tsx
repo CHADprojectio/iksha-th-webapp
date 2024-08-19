@@ -33,7 +33,7 @@ const App = () => {
 
 	return (
 		<div className={`relative ${theme == 'dark' ? 'dark' : 'light'}`}>
-			<div className='fixed flex flex-col gap-3 z-[100] right-2 bottom-[70px]'>
+			<div className='fixed flex flex-col gap-3 z-[10] right-2 bottom-[70px]'>
 				<IconButton
 					onClick={() => {
 						navigate('/')

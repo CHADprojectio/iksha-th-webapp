@@ -1,3 +1,4 @@
+import React, { useMemo, useState, useEffect } from 'react'
 import {
 	Button,
 	Headline,
@@ -6,8 +7,6 @@ import {
 	Subheadline,
 	Text,
 } from '@telegram-apps/telegram-ui'
-import IDatabaseItem from 'interfaces/IDatabaseItem'
-import React, { useMemo, useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
 	addItemToCart,
@@ -15,9 +14,13 @@ import {
 	decrementQuantity,
 	removeFromCart,
 } from 'store/slices/cartSlice'
+import IDatabaseItem from 'interfaces/IDatabaseItem'
 import close from 'icons/close.png'
 import plus from 'icons/plus.png'
 import minus from 'icons/minus.png'
+
+// Добавлен тип для action в handleQuantityChange
+type QuantityAction = 'increment' | 'decrement'
 
 interface ItemDetailsPopupProps {
 	item: IDatabaseItem | undefined
@@ -34,20 +37,28 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 	const dispatch = useAppDispatch()
 	const [variants, setVariants] = useState<string[]>([])
 	const [priceVariants, setPriceVariants] = useState<number[]>([])
-	const [currentVariant, setCurrentVariant] = useState(variants[0] || '')
+	const [currentVariant, setCurrentVariant] = useState<string>('')
 	const [currentPrice, setCurrentPrice] = useState<number | undefined>(
 		item?.price
 	)
 
 	useEffect(() => {
-		if (priceVariants.length > 0) setCurrentPrice(priceVariants[0])
-		if (priceVariants.length == 0) setCurrentPrice(item?.price)
-		setVariants(item?.variants || [])
-		setPriceVariants(item?.priceVariants || [])
+		if (item) {
+			const itemVariants = item.variants || []
+			const itemPriceVariants = item.priceVariants || []
+			setVariants(itemVariants)
+			setPriceVariants(itemPriceVariants)
+
+			if (itemVariants.length > 0 && itemPriceVariants.length > 0) {
+				setCurrentVariant(itemVariants[0])
+				setCurrentPrice(itemPriceVariants[0])
+			} else {
+				setCurrentPrice(item.price)
+			}
+		}
 	}, [item])
 
 	useEffect(() => {
-		// Update the price when the variant changes
 		if (variants.length > 0 && priceVariants.length > 0) {
 			const variantIndex = variants.indexOf(currentVariant)
 			if (variantIndex !== -1 && priceVariants[variantIndex] !== undefined) {
@@ -58,25 +69,26 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 		}
 	}, [currentVariant, variants, priceVariants, item?.price])
 
-	const isItemInCart = useMemo(
-		() =>
-			!!cart.find(
-				cartItem =>
-					cartItem.title === item?.title &&
-					cartItem.variant === currentVariant
-			),
-		[cart, item?.title, currentVariant]
-	)
+	const isItemInCart = useMemo(() => {
+		return cart.some(
+			cartItem =>
+				cartItem.title === item?.title &&
+				cartItem.variant === currentVariant
+		)
+	}, [cart, item?.title, currentVariant])
 
 	const handleCartButtonClick = () => {
 		if (item) {
 			if (isItemInCart) {
-				dispatch(removeFromCart({ title: item.title }))
+				dispatch(
+					removeFromCart({ title: item.title, variant: currentVariant })
+				)
 			} else {
 				dispatch(
 					addItemToCart({
+						photoUrl: item.photoUrl,
 						title: item.title,
-						price: currentPrice || item.price,
+						price: currentPrice ?? item.price,
 						quantity: 1,
 						variant: currentVariant,
 					})
@@ -85,7 +97,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 		}
 	}
 
-	const handleQuantityChange = (action: 'increment' | 'decrement') => {
+	const handleQuantityChange = (action: QuantityAction) => {
 		if (item) {
 			const payload = { title: item.title, variant: currentVariant }
 			if (action === 'increment') {
@@ -104,8 +116,8 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 	)
 
 	return (
-		<div className='flex items-center justify-center '>
-			<div className='overflow-y-scroll p-5 text-p popup_bg bg-bg'>
+		<div className='flex items-center justify-center'>
+			<div className='overflow-y-scroll p-5 text-p z-[100] popup_bg bg-bg'>
 				<div className='flex items-start justify-between'>
 					<IconButton
 						mode='bezeled'
@@ -134,7 +146,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 				{variants.length > 0 && (
 					<div className='select_container mt-4'>
 						<Select
-							style={{ height: '30px', margin: '0px', padding: '4px' }}
+							className='h-[30px] m-0 p-1'
 							value={currentVariant}
 							onChange={e => setCurrentVariant(e.target.value)}
 						>

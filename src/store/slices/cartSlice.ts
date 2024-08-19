@@ -26,6 +26,7 @@ export const cartSlice = createSlice({
 				existingItem.quantity += 1
 			} else {
 				state.cart.push({
+					photoUrl: action.payload.photoUrl,
 					title: action.payload.title,
 					price: action.payload.price,
 					variant: action.payload.variant,
