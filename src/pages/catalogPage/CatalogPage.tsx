@@ -43,7 +43,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 				item={currentItem}
 			/>
 			<Section>
-				<div className='relative p-5 '>
+				<div className='relative p-5 pb-0'>
 					<div className='text-[40px] text-h1 mb-5'>
 						{type == 'food' ? 'Еда' : 'Услуги'}
 					</div>
@@ -78,7 +78,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 										)
 									})}
 								</div>
-								<div className='flex w-[80vw] mt-[100px] items-center justify-center'>
+								<div className='flex w-[80vw] mt-[50px] items-center justify-center'>
 									<Pagination
 										hideNextButton={true}
 										hidePrevButton={true}
