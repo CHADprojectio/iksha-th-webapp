@@ -41,6 +41,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 
 	useEffect(() => {
 		if (priceVariants.length > 0) setCurrentPrice(priceVariants[0])
+		if (priceVariants.length == 0) setCurrentPrice(item?.price)
 		setVariants(item?.variants || [])
 		setPriceVariants(item?.priceVariants || [])
 	}, [item])
