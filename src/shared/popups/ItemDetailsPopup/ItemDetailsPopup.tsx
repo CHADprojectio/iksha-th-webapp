@@ -124,7 +124,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 					{item.title}
 				</Headline>
 				<Text className='flex gap-1 mb-3'>
-					{currentPrice || item.price}р
+					{currentPrice}р
 					{item.paymentDescription && <div>{item.paymentDescription}</div>}
 				</Text>
 				<Subheadline className='mt-2 mb-4 font-light'>
