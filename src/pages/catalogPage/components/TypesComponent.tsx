@@ -32,10 +32,10 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 								}}
 								className={`${
 									currentGroup == item ? '' : ''
-								} px-2 rounded-lg`}
+								} px-2 rounded-lg text-nowrap`}
 								key={i}
 							>
-								<Text>{item}</Text>
+								<div>{item}</div>
 							</div>
 						)
 					})}
