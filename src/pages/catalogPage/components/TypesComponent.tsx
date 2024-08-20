@@ -26,12 +26,12 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 									backgroundColor:
 										currentGroup == item
 											? 'var(--tgui--button_color)'
-											: '',
+											: 'var(--tgui--secondary_fill)',
 									color: 'var(--tgui--button_text_color)',
 								}}
 								className={`${
 									currentGroup == item ? '' : ''
-								} px-2 rounded-lg h-[40px] items-center text-nowrap`}
+								} px-2 rounded-lg h-[40px] flex justify-center items-center text-nowrap`}
 								key={i}
 							>
 								<div>{item}</div>
