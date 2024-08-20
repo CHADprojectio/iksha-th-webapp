@@ -1,4 +1,3 @@
-import { Text } from '@telegram-apps/telegram-ui'
 import React from 'react'
 import { useDatabaseTypesFetch } from 'src/hooks/useDatabaseTypesFetch'
 
