@@ -5,6 +5,7 @@ import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup/ItemDetailsPopup'
 import { Pagination, Section } from '@telegram-apps/telegram-ui'
 import { useDatabaseItemsFetch } from 'src/hooks/useDatabaseItemsFetch'
 import LoadingComponent from 'shared/LoadingComponent'
+import TypesComponent from './components/TypesComponent'
 
 interface CatalogProps {}
 
@@ -16,11 +17,20 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const queryParams = new URLSearchParams(location.search)
 	const type = queryParams.get('type')
+	const [currentGroup, setCurrentGroup] = useState<string>('')
 
-	const { data, loading, error, pages } = useDatabaseItemsFetch<IDatabaseItem>(
+	const { data, pages, loading, error } = useDatabaseItemsFetch<IDatabaseItem>(
 		type,
-		currentPage
+		currentPage, // Added missing comma here
+		currentGroup
 	)
+	console.log(type)
+	console.log(currentPage)
+	console.log(currentGroup)
+
+	// const { types, loading, error pages } = useDatabaseTypesFetch(
+	// 	"foodType"
+	// )
 
 	const [isItemDetailsPopupOpen, setIsItemDetailsPopup] = useState(false)
 	const toggleItemDetailsPopup = () => {
@@ -35,6 +45,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 			</div>
 		)
 	}
+	console.log(currentGroup)
 	return (
 		<div className='relative min-h-[100vh] bg-bg p-1 text-p'>
 			<ItemDetailsPopup
@@ -47,6 +58,11 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 					<div className='text-[40px] text-h1 mb-5'>
 						{type == 'food' ? 'Еда' : 'Услуги'}
 					</div>
+					<TypesComponent
+						currentGroup={currentGroup}
+						setCurrentGroup={setCurrentGroup}
+					/>
+
 					<div className=''>
 						{type != undefined && data != null ? (
 							<div>
@@ -66,7 +82,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 													src={item.photoUrl}
 													alt='https://th.bing.com/th/id/OIP.W9-vYFSiy6LSJEHFokqofwHaHa?rs=1&pid=ImgDetMain'
 												/>
-												<div className='flex w-full flex-col'>
+												<div className='flex flex-col w-full'>
 													<div className='w-full font-semibold text-h1'>
 														{item.title}
 													</div>
@@ -79,17 +95,19 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 									})}
 								</div>
 								<div className='flex w-[80vw] mt-[50px] items-center justify-center'>
-									<Pagination
-										hideNextButton={true}
-										hidePrevButton={true}
-										boundaryCount={1}
-										siblingCount={1}
-										onChange={(_, page) => {
-											setCurrentPage(page)
-										}}
-										page={currentPage}
-										count={pages || 1}
-									/>
+									{pages && pages > 1 && (
+										<Pagination
+											hideNextButton={true}
+											hidePrevButton={true}
+											boundaryCount={1}
+											siblingCount={1}
+											onChange={(_, page) => {
+												setCurrentPage(page)
+											}}
+											page={currentPage}
+											count={pages || 1}
+										/>
+									)}
 								</div>
 							</div>
 						) : (

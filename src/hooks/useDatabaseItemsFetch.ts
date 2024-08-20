@@ -14,7 +14,8 @@ interface IState<T> {
 
 export const useDatabaseItemsFetch = <T>(
 	type: string | null,
-	page: number
+	page: number,
+	currentGroup: string | null // Added missing comma here
 ): FetchResult<T> => {
 	const [state, setState] = useState<IState<T>>({
 		data: null,
@@ -37,7 +38,13 @@ export const useDatabaseItemsFetch = <T>(
 						headers: {
 							'Content-Type': 'application/json',
 						},
-						body: JSON.stringify({ type, page, pageSize: PAGE_SIZE }),
+						body: JSON.stringify({
+							type: type,
+							page: page,
+							pageSize: PAGE_SIZE,
+							group: currentGroup,
+							groupName: 'foodType',
+						}),
 					}
 				)
 
@@ -67,7 +74,7 @@ export const useDatabaseItemsFetch = <T>(
 		if (type) {
 			fetchData()
 		}
-	}, [type, page])
+	}, [type, page, currentGroup]) // Added currentGroup to the dependency array
 
 	return {
 		data: state.data,

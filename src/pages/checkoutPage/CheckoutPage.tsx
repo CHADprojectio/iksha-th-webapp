@@ -106,7 +106,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 
 	useEffect(() => {
 		if (cart.length === 0) navigate('/')
-	}, [cart])
+	}, [cart, navigate])
 
 	return (
 		<div
