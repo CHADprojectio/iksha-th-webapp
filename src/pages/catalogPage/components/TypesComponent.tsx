@@ -16,7 +16,7 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 	return (
 		<div>
 			{types && (
-				<div className='flex gap-4 my-5 overflow-x-scroll text-nowrap'>
+				<div className='flex gap-4 my-5 overflow-x-scroll'>
 					{types.map((item, i) => {
 						return (
 							<div
@@ -27,12 +27,12 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 									backgroundColor:
 										currentGroup == item
 											? 'var(--tgui--button_color)'
-											: 'var(--tgui--quartenary_bg_color)',
+											: '',
 									color: 'var(--tgui--button_text_color)',
 								}}
 								className={`${
 									currentGroup == item ? '' : ''
-								} px-2 rounded-lg text-nowrap`}
+								} px-2 rounded-lg h-[40px] items-center text-nowrap`}
 								key={i}
 							>
 								<div>{item}</div>
