@@ -1,7 +1,6 @@
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import cart from 'icons/cart.png'
-import back from 'icons/back.png'
 import CartPage from './pages/cartPage/CartPage'
 import { lazy, useEffect, useState } from 'react'
 import { IconButton } from '@telegram-apps/telegram-ui'
@@ -14,22 +13,21 @@ const SuccessPage = lazy(() => import('./pages/successPage/SuccessPage'))
 const FailurePage = lazy(() => import('./pages/failurePage/FailurePage'))
 
 const App = () => {
-	const navigate = useNavigate()
 	const [isCartOpen, setIsCartOpen] = useState(false)
 	const toggleCartOpen = () => setIsCartOpen(!isCartOpen)
 	const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
-	// useEffect(() => {
-	// 	if (window.Telegram?.WebApp) {
-	// 		const tg = window.Telegram.WebApp
-	// 		console.log(tg)
-	// 		console.log(tg?.colorScheme)
-	// 		setTheme(tg?.colorScheme)
-	// 		// You can also initialize or interact with tg here
-	// 	} else {
-	// 		console.error('Telegram WebApp is not available')
-	// 	}
-	// }, [])
+	useEffect(() => {
+		if (window.Telegram?.WebApp) {
+			const tg = window.Telegram.WebApp
+			console.log(tg)
+			console.log(tg?.colorScheme)
+			setTheme(tg?.colorScheme)
+			// You can also initialize or interact with tg here
+		} else {
+			console.error('Telegram WebApp is not available')
+		}
+	}, [])
 
 	return (
 		<div className={`relative ${theme == 'dark' ? 'dark' : 'light'}`}>
