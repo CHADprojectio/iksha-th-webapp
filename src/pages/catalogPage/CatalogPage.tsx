@@ -37,7 +37,6 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 		setIsItemDetailsPopup(!isItemDetailsPopupOpen)
 	}
 
-	if (loading) return <LoadingComponent />
 	if (error) {
 		return (
 			<div>
@@ -64,6 +63,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 					/>
 
 					<div className=''>
+						{loading && <LoadingComponent />}
 						{type != undefined && data != null ? (
 							<div>
 								<div className='gap-4 flex flex-col gap-y-[30px] '>

@@ -6,6 +6,7 @@ import { useAppSelector } from 'store/hooks'
 interface CheckoutPageProps {}
 
 const CheckoutPage: React.FC<CheckoutPageProps> = () => {
+	const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(false)
 	const cart = useAppSelector(state => state.cart.cart)
 	const navigate = useNavigate()
 
@@ -62,7 +63,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 		const sendCart: ISendCartItem[] = cart.map(item => ({
 			quantity: item.quantity,
 			price: item.price,
-			name: item.title,
+			name: item.title + ' ' + item.variant,
 		}))
 
 		try {
@@ -156,7 +157,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 				<Section>
 					<div className='p-3'>
 						<Button
+							disabled={isPaymentButtonDisabled}
 							onClick={async () => {
+								setIsPaymentButtonDisabled(true)
 								await processPayment()
 							}}
 							className='w-full'

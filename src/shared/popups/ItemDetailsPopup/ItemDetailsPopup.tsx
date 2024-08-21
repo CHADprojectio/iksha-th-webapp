@@ -123,7 +123,11 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 						mode='bezeled'
 						size='s'
 						className='flex w-[40px] justify-center items-center h-[40px]'
-						onClick={toggleItemDetailsPopup}
+						onClick={() => {
+							setCurrentPrice(0)
+							setVariants([])
+							toggleItemDetailsPopup()
+						}}
 					>
 						<img src={close} alt='Close' />
 					</IconButton>
@@ -137,14 +141,14 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 					{item.title}
 				</Headline>
 				<Text className='flex gap-1 mb-3'>
-					{currentPrice || item.price}р
+					{currentPrice}р
 					{item.paymentDescription && <div>{item.paymentDescription}</div>}
 				</Text>
 				<Subheadline className='mt-2 mb-4 font-light'>
 					{item.description}
 				</Subheadline>
 				{variants.length > 0 && (
-					<div className='select_container mt-4'>
+					<div className='mt-4 select_container'>
 						<Select
 							className='h-[30px] m-0 p-1'
 							value={currentVariant}

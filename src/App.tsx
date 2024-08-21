@@ -19,22 +19,22 @@ const App = () => {
 	const toggleCartOpen = () => setIsCartOpen(!isCartOpen)
 	const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
-	useEffect(() => {
-		if (window.Telegram?.WebApp) {
-			const tg = window.Telegram.WebApp
-			console.log(tg)
-			console.log(tg?.colorScheme)
-			setTheme(tg?.colorScheme)
-			// You can also initialize or interact with tg here
-		} else {
-			console.error('Telegram WebApp is not available')
-		}
-	}, [])
+	// useEffect(() => {
+	// 	if (window.Telegram?.WebApp) {
+	// 		const tg = window.Telegram.WebApp
+	// 		console.log(tg)
+	// 		console.log(tg?.colorScheme)
+	// 		setTheme(tg?.colorScheme)
+	// 		// You can also initialize or interact with tg here
+	// 	} else {
+	// 		console.error('Telegram WebApp is not available')
+	// 	}
+	// }, [])
 
 	return (
 		<div className={`relative ${theme == 'dark' ? 'dark' : 'light'}`}>
 			<div className='fixed flex flex-col gap-3 z-[10] right-2 bottom-[70px]'>
-				<IconButton
+				{/* <IconButton
 					onClick={() => {
 						navigate('/')
 						setIsCartOpen(false)
@@ -44,7 +44,7 @@ const App = () => {
 					size='l'
 				>
 					<img src={back} alt='back' />
-				</IconButton>
+				</IconButton> */}
 
 				<IconButton
 					onClick={toggleCartOpen}
