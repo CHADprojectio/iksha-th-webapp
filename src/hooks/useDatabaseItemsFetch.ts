@@ -15,7 +15,8 @@ interface IState<T> {
 export const useDatabaseItemsFetch = <T>(
 	type: string | null,
 	page: number,
-	currentGroup: string | null // Added missing comma here
+	currentGroup: string | null, // Added missing comma here
+	groupName: string | null
 ): FetchResult<T> => {
 	const [state, setState] = useState<IState<T>>({
 		data: null,
@@ -26,6 +27,9 @@ export const useDatabaseItemsFetch = <T>(
 	const PAGE_SIZE = 10
 
 	useEffect(() => {
+		console.log('hook')
+		console.log('type: ' + type)
+		console.log('currentGroup: ' + currentGroup)
 		const fetchData = async () => {
 			setLoading(true)
 			setError(null)
@@ -43,7 +47,7 @@ export const useDatabaseItemsFetch = <T>(
 							page: page,
 							pageSize: PAGE_SIZE,
 							group: currentGroup,
-							groupName: 'foodType',
+							groupName: groupName,
 						}),
 					}
 				)

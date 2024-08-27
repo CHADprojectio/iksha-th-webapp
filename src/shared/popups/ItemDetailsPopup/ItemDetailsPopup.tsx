@@ -18,6 +18,7 @@ import IDatabaseItem from 'interfaces/IDatabaseItem'
 import close from 'icons/close.png'
 import plus from 'icons/plus.png'
 import minus from 'icons/minus.png'
+import ImageComponent from 'shared/ImageComponent'
 
 // Добавлен тип для action в handleQuantityChange
 type QuantityAction = 'increment' | 'decrement'
@@ -132,7 +133,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 						<img src={close} alt='Close' />
 					</IconButton>
 				</div>
-				<img
+				<ImageComponent
 					className='w-full mt-4 rounded-lg'
 					src={item.photoUrl}
 					alt={item.title}

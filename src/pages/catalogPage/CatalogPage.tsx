@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup/ItemDetailsPopup'
 import { Pagination, Section } from '@telegram-apps/telegram-ui'
 import { useDatabaseItemsFetch } from 'src/hooks/useDatabaseItemsFetch'
 import LoadingComponent from 'shared/LoadingComponent'
 import TypesComponent from './components/TypesComponent'
+import ImageComponent from 'shared/ImageComponent'
 
 interface CatalogProps {}
 
 const CatalogPage: React.FC<CatalogProps> = () => {
 	const location = useLocation()
+	const navigate = useNavigate()
 	const [currentItem, setCurrentItem] = useState<IDatabaseItem | undefined>(
 		undefined
 	)
@@ -19,18 +21,24 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	const type = queryParams.get('type')
 	const [currentGroup, setCurrentGroup] = useState<string>('')
 
+	const groupName = type === 'food' ? 'foodType' : ''
 	const { data, pages, loading, error } = useDatabaseItemsFetch<IDatabaseItem>(
 		type,
 		currentPage, // Added missing comma here
-		currentGroup
+		currentGroup,
+		groupName
 	)
-	console.log(type)
-	console.log(currentPage)
-	console.log(currentGroup)
 
 	// const { types, loading, error pages } = useDatabaseTypesFetch(
 	// 	"foodType"
 	// )
+
+	console.log('current group: ' + currentGroup)
+
+	useEffect(() => {
+		setCurrentGroup('')
+		console.log(currentGroup)
+	}, [type])
 
 	const [isItemDetailsPopupOpen, setIsItemDetailsPopup] = useState(false)
 	const toggleItemDetailsPopup = () => {
@@ -38,12 +46,9 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	}
 
 	if (error) {
-		return (
-			<div>
-				Произошла какая то ошибка, перезагрузите сайт или прейдите позже
-			</div>
-		)
+		navigate('/*')
 	}
+
 	console.log(currentGroup)
 	return (
 		<div className='relative min-h-[100vh] bg-bg p-1 text-p'>
@@ -77,11 +82,15 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 												}}
 												key={i}
 											>
-												<img
+												<ImageComponent
+													src={item.photoUrl}
+													className='object-cover h-[128px] w-[128px]'
+												/>
+												{/* <img
 													className='object-cover h-[128px] w-[128px]'
 													src={item.photoUrl}
 													alt='https://th.bing.com/th/id/OIP.W9-vYFSiy6LSJEHFokqofwHaHa?rs=1&pid=ImgDetMain'
-												/>
+												/> */}
 												<div className='flex flex-col w-full'>
 													<div className='w-full font-semibold text-h1'>
 														{item.title}

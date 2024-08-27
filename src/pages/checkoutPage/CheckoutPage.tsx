@@ -1,4 +1,4 @@
-import { Button, Input, Section } from '@telegram-apps/telegram-ui'
+import { Button, Input, Section, Text } from '@telegram-apps/telegram-ui'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from 'store/hooks'
@@ -9,13 +9,25 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(false)
 	const cart = useAppSelector(state => state.cart.cart)
 	const navigate = useNavigate()
+	const [chatId, setChatId] = useState('')
 
 	const [name, setName] = useState('')
 	const [phone, setPhone] = useState('')
 	const [errors, setErrors] = useState<{ name?: string; phone?: string }>({})
 	const [isDisabled] = useState<boolean>(false)
-
 	const [isConclusionOpen, setIsConclusionOpen] = useState(false)
+
+	useEffect(() => {
+		if (window.Telegram?.WebApp) {
+			const tg = window.Telegram.WebApp
+			const initDataUnsafe = tg.initDataUnsafe || {}
+			const chatId = initDataUnsafe?.user?.id
+			console.log(chatId)
+			if (chatId) {
+				setChatId(chatId)
+			}
+		}
+	}, [])
 
 	const validate = () => {
 		let valid = true
@@ -125,6 +137,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							handleSubmit()
 						}}
 					>
+						<Text>Your chatId: {chatId}</Text>
 						<Input
 							header={errors.name ? errors.name : 'Имя'}
 							placeholder='Имя'
