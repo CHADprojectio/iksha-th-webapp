@@ -10,6 +10,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const cart = useAppSelector(state => state.cart.cart)
 	const navigate = useNavigate()
 	const [chatId, setChatId] = useState('')
+	const [userId, setUserId] = useState('')
 
 	const [name, setName] = useState('')
 	const [phone, setPhone] = useState('')
@@ -21,8 +22,12 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 		if (window.Telegram?.WebApp) {
 			const tg = window.Telegram.WebApp
 			const initDataUnsafe = tg.initDataUnsafe || {}
-			const chatId = initDataUnsafe?.user?.id
+			const userId = initDataUnsafe?.user?.id
+			const chatId = initDataUnsafe?.chat?.id
 			console.log(chatId)
+			if (userId) {
+				setUserId(userId)
+			}
 			if (chatId) {
 				setChatId(chatId)
 			}
@@ -138,6 +143,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 						}}
 					>
 						<Text>Your chatId: {chatId}</Text>
+						<Text>Your userId: {userId}</Text>
 						<Input
 							header={errors.name ? errors.name : 'Имя'}
 							placeholder='Имя'
