@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import IDatabaseItem from '../../interfaces/IDatabaseItem'
 import ItemDetailsPopup from 'shared/popups/ItemDetailsPopup/ItemDetailsPopup'
 import { Pagination, Section } from '@telegram-apps/telegram-ui'
@@ -12,7 +12,6 @@ interface CatalogProps {}
 
 const CatalogPage: React.FC<CatalogProps> = () => {
 	const location = useLocation()
-	const navigate = useNavigate()
 	const [currentItem, setCurrentItem] = useState<IDatabaseItem | undefined>(
 		undefined
 	)
@@ -46,7 +45,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	}
 
 	if (error) {
-		navigate('/*')
+		//
 	}
 
 	console.log(currentGroup)

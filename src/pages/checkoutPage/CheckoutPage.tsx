@@ -6,11 +6,12 @@ import { useAppSelector } from 'store/hooks'
 interface CheckoutPageProps {}
 
 const CheckoutPage: React.FC<CheckoutPageProps> = () => {
-	const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(false)
+	// const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(false)
 	const cart = useAppSelector(state => state.cart.cart)
 	const navigate = useNavigate()
 	const [chatId, setChatId] = useState('')
 	const [userId, setUserId] = useState('')
+	const [username, setUsername] = useState('')
 
 	const [name, setName] = useState('')
 	const [phone, setPhone] = useState('')
@@ -23,8 +24,12 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			const tg = window.Telegram.WebApp
 			const initDataUnsafe = tg.initDataUnsafe || {}
 			const userId = initDataUnsafe?.user?.id
+			const usernameTg = initDataUnsafe?.user?.username
 			const chatId = initDataUnsafe?.chat?.id
 			console.log(chatId)
+			if (usernameTg) {
+				setUsername(usernameTg)
+			}
 			if (userId) {
 				setUserId(userId)
 			}
@@ -93,6 +98,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 					name: name.trim(),
 					phone: phone.trim(),
 					cart: sendCart,
+					userId: userId,
+					username: username,
+					time: 'как можно скорее',
 				}),
 			})
 
@@ -142,8 +150,11 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							handleSubmit()
 						}}
 					>
-						<Text>Your chatId: {chatId}</Text>
-						<Text>Your userId: {userId}</Text>
+						<div className='flex flex-col gap-2'>
+							<Text>Your chatId: {chatId}</Text>
+							<Text>Your userId: {userId}</Text>
+							<Text>Your username: {username}</Text>
+						</div>
 						<Input
 							header={errors.name ? errors.name : 'Имя'}
 							placeholder='Имя'
@@ -176,9 +187,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 				<Section>
 					<div className='p-3'>
 						<Button
-							disabled={isPaymentButtonDisabled}
+							// disabled={isPaymentButtonDisabled}
 							onClick={async () => {
-								setIsPaymentButtonDisabled(true)
+								// setIsPaymentButtonDisabled(true)
 								await processPayment()
 							}}
 							className='w-full'

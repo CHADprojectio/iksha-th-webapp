@@ -2,15 +2,15 @@ import { Route, Routes } from 'react-router-dom'
 
 import cart from 'icons/cart.png'
 import CartPage from './pages/cartPage/CartPage'
-import { lazy, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IconButton } from '@telegram-apps/telegram-ui'
-
-const ErrorPage = lazy(() => import('./pages/errorPage/ErrorPage'))
-const CatalogPage = lazy(() => import('./pages/catalogPage/CatalogPage'))
-const MainPage = lazy(() => import('./pages/mainPage/MainPage'))
-const CheckoutPage = lazy(() => import('./pages/checkoutPage/CheckoutPage'))
-const SuccessPage = lazy(() => import('./pages/successPage/SuccessPage'))
-const FailurePage = lazy(() => import('./pages/failurePage/FailurePage'))
+import MainPage from './pages/mainPage/MainPage'
+import CatalogPage from './pages/catalogPage/CatalogPage'
+import SuccessPage from './pages/successPage/SuccessPage'
+import CheckoutPage from './pages/checkoutPage/CheckoutPage'
+import FailurePage from './pages/failurePage/FailurePage'
+import ErrorPage from './pages/errorPage/ErrorPage'
+import FoodPage from './pages/foodPage/FoodPage'
 
 const App = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
@@ -62,6 +62,7 @@ const App = () => {
 				<Route element={<CheckoutPage />} path='/checkout' />
 				<Route element={<SuccessPage />} path='/success' />
 				<Route element={<FailurePage />} path='/failure' />
+				<Route element={<FoodPage />} path='/food' />
 				<Route element={<ErrorPage />} path='*' />
 			</Routes>
 		</div>

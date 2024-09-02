@@ -8,9 +8,7 @@ const FailurePage = () => {
 				<div>
 					вы можете повторить заказ или свяжитесь с нашим менеджером!
 				</div>
-				<Link href='https://ikshacountryclubtelegramwebapp.vercel.app'>
-					вернуться в каталог
-				</Link>
+				<Link href='/'>вернуться в каталог</Link>
 			</div>
 		</div>
 	)

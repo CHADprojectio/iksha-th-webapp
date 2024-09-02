@@ -6,9 +6,7 @@ const SuccessPage = () => {
 			<div className='text-center'>
 				<LargeTitle>Спасибо за заказ!</LargeTitle>
 				<div>наш менеджер скоро свяжется с вами!</div>
-				<Link href='https://ikshacountryclubtelegramwebapp.vercel.app'>
-					вернуться в каталог
-				</Link>
+				<Link href='/'>вернуться в каталог</Link>
 			</div>
 		</div>
 	)
