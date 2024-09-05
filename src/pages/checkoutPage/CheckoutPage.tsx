@@ -1,4 +1,4 @@
-import { Button, Input, Section, Text } from '@telegram-apps/telegram-ui'
+import { Button, Input, Section } from '@telegram-apps/telegram-ui'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from 'store/hooks'
@@ -9,13 +9,19 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	// const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(false)
 	const cart = useAppSelector(state => state.cart.cart)
 	const navigate = useNavigate()
-	const [chatId, setChatId] = useState('')
+	// const [chatId, setChatId] = useState('')
 	const [userId, setUserId] = useState('')
 	const [username, setUsername] = useState('')
 
 	const [name, setName] = useState('')
 	const [phone, setPhone] = useState('')
-	const [errors, setErrors] = useState<{ name?: string; phone?: string }>({})
+	const [deliveryTime, setDeliveryTime] = useState<string>('Как можно скорее')
+
+	const [errors, setErrors] = useState<{
+		name?: string
+		phone?: string
+		deliveryTime?: string
+	}>({})
 	const [isDisabled] = useState<boolean>(false)
 	const [isConclusionOpen, setIsConclusionOpen] = useState(false)
 
@@ -25,8 +31,12 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			const initDataUnsafe = tg.initDataUnsafe || {}
 			const userId = initDataUnsafe?.user?.id
 			const usernameTg = initDataUnsafe?.user?.username
+			const nameTg = initDataUnsafe?.user?.first_name
 			const chatId = initDataUnsafe?.chat?.id
 			console.log(chatId)
+			if (nameTg) {
+				setName(nameTg)
+			}
 			if (usernameTg) {
 				setUsername(usernameTg)
 			}
@@ -34,14 +44,15 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 				setUserId(userId)
 			}
 			if (chatId) {
-				setChatId(chatId)
+				// setChatId(chatId)
 			}
 		}
 	}, [])
 
 	const validate = () => {
 		let valid = true
-		const errors: { name?: string; phone?: string } = {}
+		const errors: { name?: string; phone?: string; deliveryTime?: string } =
+			{}
 
 		if (!name.trim()) {
 			errors.name = 'Имя обязательно'
@@ -57,7 +68,13 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			valid = false
 		}
 
+		if (!deliveryTime.trim()) {
+			errors.deliveryTime = 'Время доставки обязательно'
+			valid = false
+		}
+
 		setErrors(errors)
+		setIsConclusionOpen(false)
 		return valid
 	}
 
@@ -99,8 +116,8 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 					phone: phone.trim(),
 					cart: sendCart,
 					userId: userId,
-					username: username,
-					time: 'как можно скорее',
+					username: username || '',
+					time: deliveryTime,
 				}),
 			})
 
@@ -150,11 +167,11 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							handleSubmit()
 						}}
 					>
-						<div className='flex flex-col gap-2'>
+						{/* <div className='flex flex-col gap-2'>
 							<Text>Your chatId: {chatId}</Text>
 							<Text>Your userId: {userId}</Text>
 							<Text>Your username: {username}</Text>
-						</div>
+						</div> */}
 						<Input
 							header={errors.name ? errors.name : 'Имя'}
 							placeholder='Имя'
@@ -162,16 +179,27 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							onChange={e => setName(e.target.value)}
 							status={errors.name ? 'error' : 'default'} // Visual state
 							before={<span>👤</span>} // Icon before inpu
-							disabled={isDisabled} // Disable if needed
 						/>
 						<Input
 							header={errors.phone ? errors.phone : 'Номер телефона'}
-							placeholder='пример:+7 912 345 67 89'
+							placeholder='+7 912 345 67 89'
 							value={phone}
 							onChange={e => setPhone(e.target.value)}
 							status={errors.phone ? 'error' : 'default'} // Visual state
 							before={<span>📞</span>} // Icon before input
-							disabled={isDisabled} // Disable if needed
+						/>
+						<Input
+							header={
+								errors.deliveryTime
+									? errors.deliveryTime
+									: 'Время доставки'
+							}
+							placeholder='сегодня в 15:30'
+							value={deliveryTime}
+							onChange={e => setDeliveryTime(e.target.value)}
+							status={errors.deliveryTime ? 'error' : 'default'}
+							before={<span>⏰</span>}
+							disabled={isDisabled}
 						/>
 						<Button
 							className='w-full'

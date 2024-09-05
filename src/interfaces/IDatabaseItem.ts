@@ -7,5 +7,5 @@ export default interface IDatabaseItem {
 	priceVariants?: number[]
 	paymentDescription?: string
 	isStackable: boolean
-	photoUrl: string
+	photoUrl: string[] | string
 }

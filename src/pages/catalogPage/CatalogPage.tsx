@@ -7,6 +7,8 @@ import { useDatabaseItemsFetch } from 'src/hooks/useDatabaseItemsFetch'
 import LoadingComponent from 'shared/LoadingComponent'
 import TypesComponent from './components/TypesComponent'
 import ImageComponent from 'shared/ImageComponent'
+import getPhotoUrl from 'src/helpers/GetPhotoUrl'
+import { useDatabaseTypesFetch } from 'src/hooks/useDatabaseTypesFetch'
 
 interface CatalogProps {}
 
@@ -18,26 +20,26 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const queryParams = new URLSearchParams(location.search)
 	const type = queryParams.get('type')
-	const [currentGroup, setCurrentGroup] = useState<string>('')
+	const [currentSubType, setCurrentSubType] = useState<string>('')
 
-	const groupName = type === 'food' ? 'foodType' : ''
+	const subTypeName = type + 'Type'
 	const { data, pages, loading, error } = useDatabaseItemsFetch<IDatabaseItem>(
 		type,
-		currentPage, // Added missing comma here
-		currentGroup,
-		groupName
+		currentPage,
+		currentSubType,
+		subTypeName
 	)
 
-	// const { types, loading, error pages } = useDatabaseTypesFetch(
-	// 	"foodType"
-	// )
+	const { types } = useDatabaseTypesFetch(subTypeName)
 
-	console.log('current group: ' + currentGroup)
+	console.log('current group: ' + currentSubType)
 
 	useEffect(() => {
-		setCurrentGroup('')
-		console.log(currentGroup)
-	}, [type])
+		if (types && types.length > 0) {
+			if (types[0] == null) setCurrentSubType(types[1])
+			setCurrentSubType(types[1])
+		}
+	}, [types])
 
 	const [isItemDetailsPopupOpen, setIsItemDetailsPopup] = useState(false)
 	const toggleItemDetailsPopup = () => {
@@ -48,7 +50,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 		//
 	}
 
-	console.log(currentGroup)
+	console.log(currentSubType)
 	return (
 		<div className='relative min-h-[100vh] bg-bg p-1 text-p'>
 			<ItemDetailsPopup
@@ -62,8 +64,9 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 						{type == 'food' ? 'Еда' : 'Услуги'}
 					</div>
 					<TypesComponent
-						currentGroup={currentGroup}
-						setCurrentGroup={setCurrentGroup}
+						types={types}
+						currentSubType={currentSubType}
+						setCurrentSubType={setCurrentSubType}
 					/>
 
 					<div className=''>
@@ -82,7 +85,7 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 												key={i}
 											>
 												<ImageComponent
-													src={item.photoUrl}
+													src={getPhotoUrl(item?.photoUrl)}
 													className='object-cover h-[128px] w-[128px]'
 												/>
 												{/* <img

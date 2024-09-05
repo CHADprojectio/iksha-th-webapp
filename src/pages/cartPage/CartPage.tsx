@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { removeFromCart } from 'store/slices/cartSlice'
 import close from 'icons/close.png'
 import { useNavigate } from 'react-router-dom'
+import getPhotoUrl from 'src/helpers/GetPhotoUrl'
 
 interface CartPageProps {
 	toggleCartOpen: () => void
@@ -54,11 +55,11 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 										<div className='flex mb-3'>
 											<img
 												className='h-[64px] w-[64px]'
-												src={item.photoUrl}
+												src={getPhotoUrl(item?.photoUrl)}
 												alt={item.title}
 											/>
 											<div className='flex flex-col w-full'>
-												<div className='flex justify-between items-center'>
+												<div className='flex items-center justify-between'>
 													<h2>{item.title}</h2>
 													<IconButton
 														mode='bezeled'
@@ -83,7 +84,7 @@ const CartPage: React.FC<CartPageProps> = ({ toggleCartOpen }) => {
 											</div>
 										</div>
 										<Divider />
-										<div className='flex mt-2 justify-between'>
+										<div className='flex justify-between mt-2'>
 											<div className='flex gap-2'>
 												<div className='text-[15px]'>
 													{item.price}р

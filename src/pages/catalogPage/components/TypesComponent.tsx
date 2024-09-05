@@ -1,37 +1,42 @@
 import React from 'react'
-import { useDatabaseTypesFetch } from 'src/hooks/useDatabaseTypesFetch'
 
 interface TypesComponentProps {
-	setCurrentGroup: React.Dispatch<React.SetStateAction<string>>
-	currentGroup: string
+	setCurrentSubType: React.Dispatch<React.SetStateAction<string>>
+	currentSubType: string
+	types: string[] | null
 }
-
 const TypesComponent: React.FC<TypesComponentProps> = ({
-	currentGroup,
-	setCurrentGroup,
+	setCurrentSubType,
+	currentSubType,
+	types,
 }) => {
-	const { types } = useDatabaseTypesFetch('foodType')
-
+	console.log('currentGroup: ' + currentSubType)
+	if (!types) return
+	console.log(types)
 	return (
 		<div>
 			{types && (
 				<div className='flex gap-4 my-5 overflow-x-scroll'>
 					{types.map((item, i) => {
+						if (item == null) {
+							return
+						}
 						return (
 							<div
 								onClick={() => {
-									setCurrentGroup(item)
+									setCurrentSubType(item)
 								}}
 								style={{
+									cursor: 'pointer',
 									backgroundColor:
-										currentGroup == item
+										currentSubType == item
 											? 'var(--tgui--button_color)'
 											: 'var(--tgui--secondary_fill)',
 									color: 'var(--tgui--button_text_color)',
 								}}
 								className={`${
-									currentGroup == item ? '' : ''
-								} px-2 rounded-lg flex justify-center items-center text-nowrap`}
+									currentSubType == item ? '' : ''
+								} px-2 rounded-lg flex justify-center cursor-pointer items-center text-nowrap`}
 								key={i}
 							>
 								<div>{item}</div>

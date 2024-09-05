@@ -19,6 +19,7 @@ import close from 'icons/close.png'
 import plus from 'icons/plus.png'
 import minus from 'icons/minus.png'
 import ImageComponent from 'shared/ImageComponent'
+import getPhotoUrl from 'src/helpers/GetPhotoUrl'
 
 // Добавлен тип для action в handleQuantityChange
 type QuantityAction = 'increment' | 'decrement'
@@ -87,7 +88,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 			} else {
 				dispatch(
 					addItemToCart({
-						photoUrl: item.photoUrl,
+						photoUrl: getPhotoUrl(item?.photoUrl),
 						title: item.title,
 						price: currentPrice ?? item.price,
 						quantity: 1,
@@ -135,7 +136,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 				</div>
 				<ImageComponent
 					className='w-full mt-4 rounded-lg'
-					src={item.photoUrl}
+					src={getPhotoUrl(item?.photoUrl)}
 					alt={item.title}
 				/>
 				<Headline weight='2' className='font-semibold'>

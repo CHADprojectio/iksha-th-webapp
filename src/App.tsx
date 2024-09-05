@@ -59,6 +59,8 @@ const App = () => {
 			<Routes>
 				<Route element={<MainPage />} path='/' />
 				<Route element={<CatalogPage />} path='/catalog' />
+				{/* <Route element={<CatalogPage />} path='/catalog/service' /> */}
+				{/* <Route element={<CatalogPage />} path='/catalog/food' /> */}
 				<Route element={<CheckoutPage />} path='/checkout' />
 				<Route element={<SuccessPage />} path='/success' />
 				<Route element={<FailurePage />} path='/failure' />
