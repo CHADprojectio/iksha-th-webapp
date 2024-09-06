@@ -7,6 +7,8 @@ interface CheckoutPageProps {}
 
 const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	// const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(false)
+
+	const currentType = useAppSelector(state => state.data.currentType)
 	const cart = useAppSelector(state => state.cart.cart)
 	const navigate = useNavigate()
 	// const [chatId, setChatId] = useState('')
@@ -118,6 +120,8 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 					userId: userId,
 					username: username || '',
 					time: deliveryTime,
+					location: currentType == 'service' ? '' : null,
+					type: currentType,
 				}),
 			})
 

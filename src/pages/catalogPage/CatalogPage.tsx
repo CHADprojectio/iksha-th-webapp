@@ -9,10 +9,13 @@ import TypesComponent from './components/TypesComponent'
 import ImageComponent from 'shared/ImageComponent'
 import getPhotoUrl from 'src/helpers/GetPhotoUrl'
 import { useDatabaseTypesFetch } from 'src/hooks/useDatabaseTypesFetch'
+import { useAppDispatch } from 'store/hooks'
+import { setCurrentType } from 'store/slices/dataSlice'
 
 interface CatalogProps {}
 
 const CatalogPage: React.FC<CatalogProps> = () => {
+	const dispatch = useAppDispatch()
 	const location = useLocation()
 	const [currentItem, setCurrentItem] = useState<IDatabaseItem | undefined>(
 		undefined
@@ -33,6 +36,10 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	const { types } = useDatabaseTypesFetch(subTypeName)
 
 	console.log('current group: ' + currentSubType)
+
+	useEffect(() => {
+		if (type) dispatch(setCurrentType(type))
+	}, [type])
 
 	useEffect(() => {
 		if (types && types.length > 0) {
