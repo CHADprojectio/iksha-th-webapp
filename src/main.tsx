@@ -7,14 +7,17 @@ import '@telegram-apps/telegram-ui/dist/styles.css'
 import { AppRoot } from '@telegram-apps/telegram-ui'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { store } from 'store/store.ts'
+import { persistor, store } from 'store/store.ts'
+import { PersistGate } from 'redux-persist/integration/react'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<AppRoot>
 				<Provider store={store}>
-					<App />
+					<PersistGate persistor={persistor}>
+						<App />
+					</PersistGate>
 				</Provider>
 			</AppRoot>
 		</BrowserRouter>

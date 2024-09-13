@@ -38,6 +38,10 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	console.log('current group: ' + currentSubType)
 
 	useEffect(() => {
+		setCurrentPage(1)
+	}, [currentSubType])
+
+	useEffect(() => {
 		if (type) dispatch(setCurrentType(type))
 	}, [type])
 

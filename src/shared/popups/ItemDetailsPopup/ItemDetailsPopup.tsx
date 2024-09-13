@@ -88,6 +88,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 			} else {
 				dispatch(
 					addItemToCart({
+						type: item.type,
 						photoUrl: getPhotoUrl(item?.photoUrl),
 						title: item.title,
 						price: currentPrice ?? item.price,
@@ -119,7 +120,12 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 
 	return (
 		<div className='flex items-center justify-center'>
-			<div className='overflow-y-scroll p-5 text-p z-[100] popup_bg bg-bg'>
+			<div
+				style={{
+					backgroundColor: 'var(--tgui--secondary_bg_color)',
+				}}
+				className='overflow-y-scroll p-5 text-p z-[100] popup_bg bg-bg'
+			>
 				<div className='flex items-start justify-between'>
 					<IconButton
 						mode='bezeled'

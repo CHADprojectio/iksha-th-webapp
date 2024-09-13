@@ -10,7 +10,6 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 	currentSubType,
 	types,
 }) => {
-	console.log('currentGroup: ' + currentSubType)
 	if (!types) return
 	console.log(types)
 	return (
@@ -27,6 +26,7 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 									setCurrentSubType(item)
 								}}
 								style={{
+									whiteSpace: 'nowrap',
 									cursor: 'pointer',
 									backgroundColor:
 										currentSubType == item
@@ -36,7 +36,7 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 								}}
 								className={`${
 									currentSubType == item ? '' : ''
-								} px-2 rounded-lg flex justify-center cursor-pointer items-center text-nowrap`}
+								} px-2 rounded-lg max-w-auto flex justify-center cursor-pointer items-center text-nowrap`}
 								key={i}
 							>
 								<div>{item}</div>

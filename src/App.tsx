@@ -1,9 +1,9 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 
 import cart from 'icons/cart.png'
 import CartPage from './pages/cartPage/CartPage'
 import { useEffect, useState } from 'react'
-import { IconButton } from '@telegram-apps/telegram-ui'
+import { IconButton, TabsList } from '@telegram-apps/telegram-ui'
 import MainPage from './pages/mainPage/MainPage'
 import CatalogPage from './pages/catalogPage/CatalogPage'
 import SuccessPage from './pages/successPage/SuccessPage'
@@ -11,12 +11,13 @@ import CheckoutPage from './pages/checkoutPage/CheckoutPage'
 import FailurePage from './pages/failurePage/FailurePage'
 import ErrorPage from './pages/errorPage/ErrorPage'
 import FoodPage from './pages/foodPage/FoodPage'
+import { TabsItem } from '@telegram-apps/telegram-ui/dist/components/Navigation/TabsList/components/TabsItem/TabsItem'
 
 const App = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
 	const toggleCartOpen = () => setIsCartOpen(!isCartOpen)
 	const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
+	const navigate = useNavigate()
 	useEffect(() => {
 		if (window.Telegram?.WebApp) {
 			const tg = window.Telegram.WebApp
@@ -31,19 +32,23 @@ const App = () => {
 
 	return (
 		<div className={`relative ${theme == 'dark' ? 'dark' : 'light'}`}>
-			<div className='fixed flex flex-col gap-3 z-[10] right-2 bottom-[70px]'>
-				{/* <IconButton
-					onClick={() => {
-						navigate('/')
-						setIsCartOpen(false)
-					}}
-					className='w-[50px] rounded-full h-[50px] '
-					mode='bezeled'
-					size='l'
-				>
-					<img src={back} alt='back' />
-				</IconButton> */}
+			<div className='fixed bottom-0 w-screen h-[40px] z-50'>
+				<TabsList>
+					<TabsItem
+						onClick={() => {
+							navigate('/catalog?type=food')
+						}}
+						selected={false}
+					>
+						Еда
+					</TabsItem>
+					<TabsItem onClick={() => navigate('/catalog?type=service')}>
+						Услуги
+					</TabsItem>
+				</TabsList>
+			</div>
 
+			<div className='fixed flex flex-col gap-3 z-[10] right-2 bottom-[70px]'>
 				<IconButton
 					onClick={toggleCartOpen}
 					className='w-[50px] rounded-full h-[50px] '

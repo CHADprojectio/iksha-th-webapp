@@ -3,11 +3,15 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 interface CounterState {
 	currentType: string
+	phone: string
+	name: string
 }
 
 // Define the initial state using that type
 const initialState: CounterState = {
 	currentType: '',
+	phone: '',
+	name: '',
 }
 
 export const counterSlice = createSlice({
@@ -18,9 +22,16 @@ export const counterSlice = createSlice({
 		setCurrentType: (state, action: PayloadAction<string>) => {
 			state.currentType = action.payload
 		},
+		setCurrentPhone: (state, action: PayloadAction<string>) => {
+			if (state.phone == '') state.phone = action.payload
+		},
+		setCurrentName: (state, action: PayloadAction<string>) => {
+			if (state.name == '') state.name = action.payload
+		},
 	},
 })
 
-export const { setCurrentType } = counterSlice.actions
+export const { setCurrentType, setCurrentPhone, setCurrentName } =
+	counterSlice.actions
 
 export default counterSlice.reducer

@@ -1,22 +1,38 @@
 import { Button, Input, Section } from '@telegram-apps/telegram-ui'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppSelector } from 'store/hooks'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import PickLocation from './components/PickLocation'
+import { setCurrentName, setCurrentPhone } from 'store/slices/dataSlice'
 
 interface CheckoutPageProps {}
 
 const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	// const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(false)
-
+	const dispatch = useAppDispatch()
 	const currentType = useAppSelector(state => state.data.currentType)
 	const cart = useAppSelector(state => state.cart.cart)
+
+	const stateName = useAppSelector(state => state.data.name)
+	const statePhone = useAppSelector(state => state.data.phone)
+
 	const navigate = useNavigate()
+	const [locations] = useState([
+		'Лесная резиденция',
+		'Вилла Делюкс',
+		'Дуплекс',
+		'Домик Коралловый',
+		'Домик Лесной',
+		'Домик Морской',
+		'Шале',
+	])
+	const [currentLocation, setCurrentLocation] = useState(locations[0])
 	// const [chatId, setChatId] = useState('')
 	const [userId, setUserId] = useState('')
 	const [username, setUsername] = useState('')
 
-	const [name, setName] = useState('')
-	const [phone, setPhone] = useState('')
+	const [name, setName] = useState(stateName)
+	const [phone, setPhone] = useState(statePhone)
 	const [deliveryTime, setDeliveryTime] = useState<string>('Как можно скорее')
 
 	const [errors, setErrors] = useState<{
@@ -83,6 +99,8 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const handleSubmit = () => {
 		if (validate()) {
 			// Proceed to the next step if valid
+			dispatch(setCurrentName(name))
+			dispatch(setCurrentPhone(phone))
 			setIsConclusionOpen(true)
 			console.log('Form is valid, proceed to the next step')
 			// Add logic to move to the next step or submit the form
@@ -101,6 +119,19 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	}
 
 	const processPayment = async () => {
+		const serviceArray: string[] = []
+		const foodArray: string[] = []
+
+		cart.forEach(item => {
+			if (item.type === 'service') {
+				serviceArray.push(`${item.title}-${item.price}-${item.quantity}`)
+			} else if (item.type === 'food') {
+				foodArray.push(
+					`${item.title} ${item.variant}-${item.price}-${item.quantity}`
+				)
+			}
+		})
+
 		const sendCart: ISendCartItem[] = cart.map(item => ({
 			quantity: item.quantity,
 			price: item.price,
@@ -120,14 +151,15 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 					userId: userId,
 					username: username || '',
 					time: deliveryTime,
-					location: currentType == 'service' ? '' : null,
+					location: currentLocation,
 					type: currentType,
+					foodArray: foodArray,
+					serviceArray: serviceArray,
 				}),
 			})
 
 			if (res.ok) {
 				const contentType = res.headers.get('Content-Type')
-
 				if (contentType && contentType.includes('application/json')) {
 					// If the response is JSON, parse it
 					const data = await res.json()
@@ -192,6 +224,11 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							status={errors.phone ? 'error' : 'default'} // Visual state
 							before={<span>📞</span>} // Icon before input
 						/>
+						<PickLocation
+							setCurrentLocation={setCurrentLocation}
+							currentLocation={currentLocation}
+							locations={locations}
+						/>
 						<Input
 							header={
 								errors.deliveryTime
@@ -200,6 +237,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							}
 							placeholder='сегодня в 15:30'
 							value={deliveryTime}
+							className=''
 							onChange={e => setDeliveryTime(e.target.value)}
 							status={errors.deliveryTime ? 'error' : 'default'}
 							before={<span>⏰</span>}
