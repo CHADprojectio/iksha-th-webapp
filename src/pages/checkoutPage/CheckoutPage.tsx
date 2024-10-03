@@ -1,14 +1,13 @@
-import { Button, Input, Section } from '@telegram-apps/telegram-ui'
+import { Button, IconButton, Input, Section } from '@telegram-apps/telegram-ui'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import PickLocation from './components/PickLocation'
 import { setCurrentName, setCurrentPhone } from 'store/slices/dataSlice'
-
+import close from 'icons/close.png'
 interface CheckoutPageProps {}
 
 const CheckoutPage: React.FC<CheckoutPageProps> = () => {
-	// const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(false)
 	const dispatch = useAppDispatch()
 	const currentType = useAppSelector(state => state.data.currentType)
 	const cart = useAppSelector(state => state.cart.cart)
@@ -27,23 +26,31 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 		'Шале',
 	])
 	const [currentLocation, setCurrentLocation] = useState(locations[0])
-	// const [chatId, setChatId] = useState('')
 	const [userId, setUserId] = useState('')
 	const [username, setUsername] = useState('')
 
 	const [name, setName] = useState(stateName)
-	const [phone, setPhone] = useState(statePhone)
-	const [deliveryTime, setDeliveryTime] = useState<string>('Как можно скорее')
+	const [phone, setPhone] = useState('')
+	const [deliveryTimeFood, setDeliveryTimeFood] =
+		useState<string>('Как можно скорее')
+	const [deliveryTimeService, setDeliveryTimeService] =
+		useState<string>('Как можно скорее')
 
 	const [errors, setErrors] = useState<{
 		name?: string
 		phone?: string
-		deliveryTime?: string
+		deliveryTimeFood?: string
+		deliveryTimeService?: string
 	}>({})
 	const [isDisabled] = useState<boolean>(false)
 	const [isConclusionOpen, setIsConclusionOpen] = useState(false)
 
+	const isFoodExists = cart.find(c => c.type === 'food')
+	const isServiceExists = cart.find(c => c.type === 'service')
+
 	useEffect(() => {
+		setPhone(statePhone)
+
 		if (window.Telegram?.WebApp) {
 			const tg = window.Telegram.WebApp
 			const initDataUnsafe = tg.initDataUnsafe || {}
@@ -61,16 +68,17 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			if (userId) {
 				setUserId(userId)
 			}
-			if (chatId) {
-				// setChatId(chatId)
-			}
 		}
 	}, [])
 
 	const validate = () => {
 		let valid = true
-		const errors: { name?: string; phone?: string; deliveryTime?: string } =
-			{}
+		const errors: {
+			name?: string
+			phone?: string
+			deliveryTimeFood?: string
+			deliveryTimeService?: string
+		} = {}
 
 		if (!name.trim()) {
 			errors.name = 'Имя обязательно'
@@ -86,8 +94,14 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			valid = false
 		}
 
-		if (!deliveryTime.trim()) {
-			errors.deliveryTime = 'Время доставки обязательно'
+		// Проверяем оба времени доставки
+		if (isFoodExists && !deliveryTimeFood.trim()) {
+			errors.deliveryTimeFood = 'Время доставки еды обязательно'
+			valid = false
+		}
+
+		if (isServiceExists && !deliveryTimeService.trim()) {
+			errors.deliveryTimeService = 'Время доставки услуг обязательно'
 			valid = false
 		}
 
@@ -98,24 +112,13 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 
 	const handleSubmit = () => {
 		if (validate()) {
-			// Proceed to the next step if valid
 			dispatch(setCurrentName(name))
 			dispatch(setCurrentPhone(phone))
 			setIsConclusionOpen(true)
 			console.log('Form is valid, proceed to the next step')
-			// Add logic to move to the next step or submit the form
 		} else {
 			console.log('Form is invalid, please correct the errors')
 		}
-	}
-	const redirect = (link: string) => {
-		window.location.replace(link)
-	}
-
-	interface ISendCartItem {
-		quantity: number
-		name: string
-		price: number
 	}
 
 	const processPayment = async () => {
@@ -132,7 +135,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			}
 		})
 
-		const sendCart: ISendCartItem[] = cart.map(item => ({
+		const sendCart = cart.map(item => ({
 			quantity: item.quantity,
 			price: item.price,
 			name: item.title + ' ' + item.variant,
@@ -150,7 +153,10 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 					cart: sendCart,
 					userId: userId,
 					username: username || '',
-					time: deliveryTime,
+					time: {
+						timeFood: deliveryTimeFood,
+						timeService: deliveryTimeService,
+					},
 					location: currentLocation,
 					type: currentType,
 					foodArray: foodArray,
@@ -161,17 +167,14 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			if (res.ok) {
 				const contentType = res.headers.get('Content-Type')
 				if (contentType && contentType.includes('application/json')) {
-					// If the response is JSON, parse it
 					const data = await res.json()
-					redirect(data.paymentUrl) // Adjust this if your JSON structure is different
+					navigate(data.paymentUrl)
 				} else {
-					// If the response is plain text, treat it as a URL
 					const paymentUrl = await res.text()
-					redirect(paymentUrl)
+					navigate(paymentUrl)
 				}
 			} else {
-				// Handle non-200 responses
-				const errorData = await res.text() // Assuming error messages could also be plain text
+				const errorData = await res.text()
 				console.error('Payment failed:', errorData)
 				alert('Payment failed. Please try again.')
 			}
@@ -192,6 +195,21 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			style={{ background: 'var(--tgui--secondary_bg_color)' }}
 			className='relative flex flex-col min-h-screen gap-[20px] p-[10px] text-p'
 		>
+			<div
+				onClick={() => {
+					navigate('/catalog?type=food')
+				}}
+				className='fixed top-4 right-4'
+			>
+				<IconButton
+					mode='bezeled'
+					size='s'
+					className='flex w-[35px] justify-center items-center h-[35px]'
+					// style={{ width: '40px', height: '40px' }}
+				>
+					<img src={close} alt='' />
+				</IconButton>
+			</div>
 			<Section>
 				<div className='p-3'>
 					<div className='mb-5 font-semibold text-[20px]'>
@@ -203,46 +221,63 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							handleSubmit()
 						}}
 					>
-						{/* <div className='flex flex-col gap-2'>
-							<Text>Your chatId: {chatId}</Text>
-							<Text>Your userId: {userId}</Text>
-							<Text>Your username: {username}</Text>
-						</div> */}
 						<Input
 							header={errors.name ? errors.name : 'Имя'}
 							placeholder='Имя'
 							value={name}
 							onChange={e => setName(e.target.value)}
-							status={errors.name ? 'error' : 'default'} // Visual state
-							before={<span>👤</span>} // Icon before inpu
+							status={errors.name ? 'error' : 'default'}
+							before={<span>👤</span>}
 						/>
 						<Input
 							header={errors.phone ? errors.phone : 'Номер телефона'}
 							placeholder='+7 912 345 67 89'
 							value={phone}
 							onChange={e => setPhone(e.target.value)}
-							status={errors.phone ? 'error' : 'default'} // Visual state
-							before={<span>📞</span>} // Icon before input
+							status={errors.phone ? 'error' : 'default'}
+							before={<span>📞</span>}
 						/>
+
 						<PickLocation
 							setCurrentLocation={setCurrentLocation}
 							currentLocation={currentLocation}
 							locations={locations}
 						/>
-						<Input
-							header={
-								errors.deliveryTime
-									? errors.deliveryTime
-									: 'Время доставки'
-							}
-							placeholder='сегодня в 15:30'
-							value={deliveryTime}
-							className=''
-							onChange={e => setDeliveryTime(e.target.value)}
-							status={errors.deliveryTime ? 'error' : 'default'}
-							before={<span>⏰</span>}
-							disabled={isDisabled}
-						/>
+
+						{isFoodExists && (
+							<Input
+								header={
+									errors.deliveryTimeFood
+										? errors.deliveryTimeFood
+										: 'Время доставки еды'
+								}
+								placeholder='сегодня в 15:30'
+								value={deliveryTimeFood}
+								onChange={e => setDeliveryTimeFood(e.target.value)}
+								status={errors.deliveryTimeFood ? 'error' : 'default'}
+								before={<span>⏰</span>}
+								disabled={isDisabled}
+							/>
+						)}
+
+						{isServiceExists && (
+							<Input
+								header={
+									errors.deliveryTimeService
+										? errors.deliveryTimeService
+										: 'Время доставки услуг'
+								}
+								placeholder='сегодня в 15:30'
+								value={deliveryTimeService}
+								onChange={e => setDeliveryTimeService(e.target.value)}
+								status={
+									errors.deliveryTimeService ? 'error' : 'default'
+								}
+								before={<span>⏰</span>}
+								disabled={isDisabled}
+							/>
+						)}
+
 						<Button
 							className='w-full'
 							type='submit'
@@ -253,13 +288,12 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 					</form>
 				</div>
 			</Section>
+
 			{isConclusionOpen && (
 				<Section>
 					<div className='p-3'>
 						<Button
-							// disabled={isPaymentButtonDisabled}
 							onClick={async () => {
-								// setIsPaymentButtonDisabled(true)
 								await processPayment()
 							}}
 							className='w-full'
