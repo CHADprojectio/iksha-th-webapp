@@ -12,10 +12,13 @@ import FailurePage from './pages/failurePage/FailurePage'
 import ErrorPage from './pages/errorPage/ErrorPage'
 import FoodPage from './pages/foodPage/FoodPage'
 import { TabsItem } from '@telegram-apps/telegram-ui/dist/components/Navigation/TabsList/components/TabsItem/TabsItem'
+import {useAppSelector} from "store/hooks.ts";
+import {getCartTotalQuantity} from "./helpers/get-cart-total-quantity.ts";
 
 const App = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
 	const toggleCartOpen = () => setIsCartOpen(!isCartOpen)
+	const cartData = useAppSelector(state => state.cart.cart)
 	const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 	const navigate = useNavigate()
 	useEffect(() => {
@@ -58,6 +61,9 @@ const App = () => {
 					{/* className='p-2 rounded-full cursor-pointer bg-button bottom-5 */}
 
 					<img src={cart} alt='cart' />
+					{
+						!!cartData.length && <div className={"absolute  -right-1 -top-3 w-5 h-5 rounded-full text-sm bg-blue-500 flex items-center justify-center text-black font-bold"}>{getCartTotalQuantity(cartData)}</div>
+					}
 				</IconButton>
 			</div>
 			{isCartOpen && <CartPage toggleCartOpen={toggleCartOpen} />}

@@ -16,8 +16,6 @@ import {
 } from 'store/slices/cartSlice'
 import IDatabaseItem from 'interfaces/IDatabaseItem'
 import close from 'icons/close.png'
-import plus from 'icons/plus.png'
-import minus from 'icons/minus.png'
 import ImageComponent from 'shared/ImageComponent'
 import getPhotoUrl from 'src/helpers/GetPhotoUrl'
 
@@ -71,32 +69,30 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 		}
 	}, [currentVariant, variants, priceVariants, item?.price])
 
-	const isItemInCart = useMemo(() => {
-		return cart.some(
-			cartItem =>
-				cartItem.title === item?.title &&
-				cartItem.variant === currentVariant
-		)
-	}, [cart, item?.title, currentVariant])
+	const itemFromCard = useMemo(() =>
+		cart.find(c => c.title === item?.title &&
+			c.variant === currentVariant), [cart, item?.title, currentVariant])
 
 	const handleCartButtonClick = () => {
-		if (item) {
-			if (isItemInCart) {
-				dispatch(
-					removeFromCart({ title: item.title, variant: currentVariant })
-				)
-			} else {
-				dispatch(
-					addItemToCart({
-						type: item.type,
-						photoUrl: getPhotoUrl(item?.photoUrl),
-						title: item.title,
-						price: currentPrice ?? item.price,
-						quantity: 1,
-						variant: currentVariant,
-					})
-				)
-			}
+		if (!item) {
+			return;
+		}
+
+		if (itemFromCard) {
+			dispatch(
+				removeFromCart({ title: item.title, variant: currentVariant })
+			)
+		} else {
+			dispatch(
+				addItemToCart({
+					type: item.type,
+					photoUrl: getPhotoUrl(item?.photoUrl),
+					title: item.title,
+					price: currentPrice ?? item.price,
+					quantity: 1,
+					variant: currentVariant,
+				})
+			)
 		}
 	}
 
@@ -112,11 +108,6 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 	}
 
 	if (!item || !isItemDetailsPopupOpen) return null
-
-	const cartItem = cart.find(
-		cartItem =>
-			cartItem.title === item.title && cartItem.variant === currentVariant
-	)
 
 	return (
 		<div className='flex items-center justify-center'>
@@ -172,28 +163,43 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 				)}
 
 				<div className='flex justify-between mt-3'>
-					<Button onClick={handleCartButtonClick}>
-						{isItemInCart ? 'удалить из корзины' : 'добавить в корзину'}
-					</Button>
-					{item.isStackable && isItemInCart && (
-						<div className='flex items-center'>
-							<IconButton
-								size='s'
-								className='px-4 py-2 w-[35px] h-[35px] rounded-full text-h1 bg-button'
-								onClick={() => handleQuantityChange('decrement')}
-							>
-								<img src={minus} alt='Decrement' />
-							</IconButton>
-							<div className='mx-2'>{cartItem?.quantity}</div>
-							<IconButton
-								size='s'
-								className='px-4 py-2 rounded-full w-[35px] h-[35px] text-h1 bg-button'
-								onClick={() => handleQuantityChange('increment')}
-							>
-								<img src={plus} alt='Increment' />
-							</IconButton>
-						</div>
-					)}
+					{
+						!itemFromCard ? (<Button onClick={handleCartButtonClick}>
+							добавить в корзину
+						</Button>) : (
+							<div className={"flex items-center border-[#2a90ff] border rounded-lg"}>
+								<Button onClick={() => handleQuantityChange("decrement")}>
+									-
+								</Button>
+								<div className={"w-36 h-full flex items-center justify-center text-xl text-[#2a90ff]"}>
+									{itemFromCard.quantity}
+								</div>
+								<Button onClick={() => handleQuantityChange("increment")}>
+									+
+								</Button>
+							</div>
+						)
+					}
+
+					{/*{item.isStackable && isItemInCart && (*/}
+					{/*	<div className='flex items-center'>*/}
+					{/*		<IconButton*/}
+					{/*			size='s'*/}
+					{/*			className='px-4 py-2 w-[35px] h-[35px] rounded-full text-h1 bg-button'*/}
+					{/*			onClick={() => handleQuantityChange('decrement')}*/}
+					{/*		>*/}
+					{/*			<img src={minus} alt='Decrement' />*/}
+					{/*		</IconButton>*/}
+					{/*		<div className='mx-2'>{cartItem?.quantity}</div>*/}
+					{/*		<IconButton*/}
+					{/*			size='s'*/}
+					{/*			className='px-4 py-2 rounded-full w-[35px] h-[35px] text-h1 bg-button'*/}
+					{/*			onClick={() => handleQuantityChange('increment')}*/}
+					{/*		>*/}
+					{/*			<img src={plus} alt='Increment' />*/}
+					{/*		</IconButton>*/}
+					{/*	</div>*/}
+					{/*)}*/}
 				</div>
 			</div>
 		</div>
