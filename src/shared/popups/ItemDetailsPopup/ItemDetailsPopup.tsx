@@ -168,13 +168,13 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 							добавить в корзину
 						</Button>) : (
 							<div className={"flex items-center border-[#2a90ff] border rounded-lg"}>
-								<Button onClick={() => handleQuantityChange("decrement")}>
+								<Button style={{borderRadius: "0.5rem"}} onClick={() => handleQuantityChange("decrement")}>
 									-
 								</Button>
 								<div className={"w-36 h-full flex items-center justify-center text-xl text-[#2a90ff]"}>
 									{itemFromCard.quantity}
 								</div>
-								<Button onClick={() => handleQuantityChange("increment")}>
+								<Button style={{borderRadius: "0.5rem"}} className={"rounded-lg"} onClick={() => handleQuantityChange("increment")}>
 									+
 								</Button>
 							</div>
