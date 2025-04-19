@@ -168,10 +168,10 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 				const contentType = res.headers.get('Content-Type')
 				if (contentType && contentType.includes('application/json')) {
 					const data = await res.json()
-					navigate(data.paymentUrl)
+					window.location.href = data.paymentUrl
 				} else {
 					const paymentUrl = await res.text()
-					navigate(paymentUrl)
+					window.location.href = paymentUrl
 				}
 			} else {
 				const errorData = await res.text()
