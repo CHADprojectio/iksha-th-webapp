@@ -18,6 +18,7 @@ import IDatabaseItem from 'interfaces/IDatabaseItem'
 import close from 'icons/close.png'
 import ImageComponent from 'shared/ImageComponent'
 import getPhotoUrl from 'src/helpers/GetPhotoUrl'
+import SelectQuantity from "../../../components/SelectQuantity.tsx";
 
 // Добавлен тип для action в handleQuantityChange
 type QuantityAction = 'increment' | 'decrement'
@@ -29,10 +30,10 @@ interface ItemDetailsPopupProps {
 }
 
 const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
-	item,
-	toggleItemDetailsPopup,
-	isItemDetailsPopupOpen,
-}) => {
+															   item,
+															   toggleItemDetailsPopup,
+															   isItemDetailsPopupOpen,
+														   }) => {
 	const cart = useAppSelector(state => state.cart.cart)
 	const dispatch = useAppDispatch()
 	const [variants, setVariants] = useState<string[]>([])
@@ -102,7 +103,11 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 			if (action === 'increment') {
 				dispatch(incrementQuantity(payload))
 			} else {
-				dispatch(decrementQuantity(payload))
+				if (itemFromCard && itemFromCard.quantity > 1) {
+					dispatch(decrementQuantity(payload))
+				} else {
+					dispatch(removeFromCart(payload))
+				}
 			}
 		}
 	}
@@ -167,17 +172,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 						!itemFromCard ? (<Button onClick={handleCartButtonClick}>
 							добавить в корзину
 						</Button>) : (
-							<div className={"flex items-center border-[#2a90ff] border rounded-lg"}>
-								<Button style={{borderRadius: "0.5rem"}} onClick={() => handleQuantityChange("decrement")}>
-									-
-								</Button>
-								<div className={"w-36 h-full flex items-center justify-center text-xl text-[#2a90ff]"}>
-									{itemFromCard.quantity}
-								</div>
-								<Button style={{borderRadius: "0.5rem"}} className={"rounded-lg"} onClick={() => handleQuantityChange("increment")}>
-									+
-								</Button>
-							</div>
+							<SelectQuantity quantity={itemFromCard.quantity} handleQuantityChange={handleQuantityChange} size={"l"} />
 						)
 					}
 

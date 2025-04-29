@@ -8,7 +8,6 @@ import LoadingComponent from 'shared/LoadingComponent'
 import TypesComponent from './components/TypesComponent'
 import ImageComponent from 'shared/ImageComponent'
 import getPhotoUrl from 'src/helpers/GetPhotoUrl'
-import { useDatabaseTypesFetch } from 'src/hooks/useDatabaseTypesFetch'
 import { useAppDispatch } from 'store/hooks'
 import { setCurrentType } from 'store/slices/dataSlice'
 
@@ -26,42 +25,22 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 	const [currentSubType, setCurrentSubType] = useState<string>('')
 
 	const subTypeName = type + 'Type'
-	const { data, pages, loading, error } = useDatabaseItemsFetch<IDatabaseItem>(
+	const { data, types, pages, loading } = useDatabaseItemsFetch<IDatabaseItem>(
 		type,
 		currentPage,
 		currentSubType,
 		subTypeName
 	)
 
-	const { types } = useDatabaseTypesFetch(subTypeName)
-
-	console.log('current group: ' + currentSubType)
-
-	useEffect(() => {
-		setCurrentPage(1)
-	}, [currentSubType])
-
 	useEffect(() => {
 		if (type) dispatch(setCurrentType(type))
 	}, [type])
-
-	useEffect(() => {
-		if (types && types.length > 0) {
-			if (types[0] == null) setCurrentSubType(types[1])
-			setCurrentSubType(types[1])
-		}
-	}, [types])
 
 	const [isItemDetailsPopupOpen, setIsItemDetailsPopup] = useState(false)
 	const toggleItemDetailsPopup = () => {
 		setIsItemDetailsPopup(!isItemDetailsPopupOpen)
 	}
 
-	if (error) {
-		//
-	}
-
-	console.log(currentSubType)
 	return (
 		<div className='relative min-h-[100vh] bg-bg p-1 text-p'>
 			<ItemDetailsPopup

@@ -5,11 +5,13 @@ interface FetchResult<T> {
 	loading: boolean
 	error: string | null
 	pages: number | null
+	types: string[]
 }
 
 interface IState<T> {
 	data: T[] | null
 	pages: number | null
+	types: string[]
 }
 
 export const useDatabaseItemsFetch = <T>(
@@ -21,15 +23,13 @@ export const useDatabaseItemsFetch = <T>(
 	const [state, setState] = useState<IState<T>>({
 		data: null,
 		pages: null,
+		types: []
 	})
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
 	const PAGE_SIZE = 10
 
 	useEffect(() => {
-		console.log('hook')
-		console.log('type: ' + type)
-		console.log('currentGroup: ' + currentGroup)
 		const fetchData = async () => {
 			setLoading(true)
 			setError(null)
@@ -56,11 +56,12 @@ export const useDatabaseItemsFetch = <T>(
 					throw new Error(`Failed to fetch data: ${res.statusText}`)
 				}
 
-				const result: { data: T[]; pages: number } = await res.json()
+				const result: { data: T[]; pages: number, types: string[] } = await res.json()
 
 				setState({
 					data: result.data,
 					pages: result.pages,
+					types: result.types
 				})
 			} catch (error) {
 				setError(
@@ -69,6 +70,7 @@ export const useDatabaseItemsFetch = <T>(
 				setState({
 					data: null,
 					pages: null,
+					types: [],
 				})
 			} finally {
 				setLoading(false)
@@ -85,5 +87,6 @@ export const useDatabaseItemsFetch = <T>(
 		loading,
 		error,
 		pages: state.pages,
+		types: state.types
 	}
 }
