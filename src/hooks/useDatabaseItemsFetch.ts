@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import {useState, useEffect, useRef} from 'react'
 
 interface FetchResult<T> {
 	data: T[] | null
@@ -20,6 +20,8 @@ export const useDatabaseItemsFetch = <T>(
 	currentGroup: string | null, // Added missing comma here
 	groupName: string | null
 ): FetchResult<T> => {
+	const prevGroupName = useRef<null | string>(null)
+
 	const [state, setState] = useState<IState<T>>({
 		data: null,
 		pages: null,
@@ -30,6 +32,12 @@ export const useDatabaseItemsFetch = <T>(
 	const PAGE_SIZE = 10
 
 	useEffect(() => {
+		if (groupName !== prevGroupName.current) {
+			currentGroup = ''
+		}
+
+		prevGroupName.current = groupName
+
 		const fetchData = async () => {
 			setLoading(true)
 			setError(null)
@@ -80,7 +88,7 @@ export const useDatabaseItemsFetch = <T>(
 		if (type) {
 			fetchData()
 		}
-	}, [type, page, currentGroup]) // Added currentGroup to the dependency array
+	}, [type, page, currentGroup, groupName]) // Added currentGroup to the dependency array
 
 	return {
 		data: state.data,

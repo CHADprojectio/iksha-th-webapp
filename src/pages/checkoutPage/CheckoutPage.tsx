@@ -5,26 +5,19 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import PickLocation from './components/PickLocation'
 import { setCurrentName, setCurrentPhone } from 'store/slices/dataSlice'
 import close from 'icons/close.png'
+import {useGetLocations} from "../../hooks/useGetLocations.ts";
 interface CheckoutPageProps {}
 
 const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const dispatch = useAppDispatch()
 	const currentType = useAppSelector(state => state.data.currentType)
 	const cart = useAppSelector(state => state.cart.cart)
+	const {data: locations, isLoading} = useGetLocations()
 
 	const stateName = useAppSelector(state => state.data.name)
 	const statePhone = useAppSelector(state => state.data.phone)
 
 	const navigate = useNavigate()
-	const [locations] = useState([
-		'Лесная резиденция',
-		'Вилла Делюкс',
-		'Дуплекс',
-		'Домик Коралловый',
-		'Домик Лесной',
-		'Домик Морской',
-		'Шале',
-	])
 	const [currentLocation, setCurrentLocation] = useState(locations[0])
 	const [userId, setUserId] = useState('')
 	const [username, setUsername] = useState('')
@@ -242,6 +235,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							setCurrentLocation={setCurrentLocation}
 							currentLocation={currentLocation}
 							locations={locations}
+							isLoading={isLoading}
 						/>
 
 						{isFoodExists && (

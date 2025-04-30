@@ -13,7 +13,7 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
     const [localType, setLocalType] = useState<string>(currentSubType)
 
     useEffect(() => {
-        if (types && !currentSubType) {
+        if ((types && !currentSubType) || (types && !types.includes(currentSubType))) {
             setLocalType(types[0]);
         } else {
             setLocalType(currentSubType)
