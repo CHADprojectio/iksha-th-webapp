@@ -86,7 +86,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 		} else {
 			dispatch(
 				addItemToCart({
-					type: item.type,
+					sheetName: item.sheetName,
 					photoUrl: getPhotoUrl(item?.photoUrl),
 					title: item.title,
 					price: currentPrice ?? item.price,

@@ -1,4 +1,4 @@
-import { Button, IconButton, Input, Section } from '@telegram-apps/telegram-ui'
+import {Button, IconButton, Input, Section} from '@telegram-apps/telegram-ui'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -6,13 +6,17 @@ import PickLocation from './components/PickLocation'
 import { setCurrentName, setCurrentPhone } from 'store/slices/dataSlice'
 import close from 'icons/close.png'
 import {useGetLocations} from "../../hooks/useGetLocations.ts";
+import DeliveryTimePicker from "./components/DeliveryTimePicker.tsx";
+import {TDeliveryTime} from "./types.ts";
+import {useGetCartInfo} from "../../hooks/useGetCartInfo.ts";
 interface CheckoutPageProps {}
 
 const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const dispatch = useAppDispatch()
 	const currentType = useAppSelector(state => state.data.currentType)
 	const cart = useAppSelector(state => state.cart.cart)
-	const {data: locations, isLoading} = useGetLocations()
+	const {data: locations, isLoading: isLocationsLoading} = useGetLocations()
+	const {data: cartInfo, isLoading: isCartInfoLoading} = useGetCartInfo()
 
 	const stateName = useAppSelector(state => state.data.name)
 	const statePhone = useAppSelector(state => state.data.phone)
@@ -25,21 +29,13 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const [name, setName] = useState(stateName)
 	const [phone, setPhone] = useState('')
 	const [deliveryTimeFood, setDeliveryTimeFood] =
-		useState<string>('Как можно скорее')
-	const [deliveryTimeService, setDeliveryTimeService] =
-		useState<string>('Как можно скорее')
+		useState<TDeliveryTime | null>(null)
 
 	const [errors, setErrors] = useState<{
 		name?: string
 		phone?: string
-		deliveryTimeFood?: string
-		deliveryTimeService?: string
 	}>({})
-	const [isDisabled] = useState<boolean>(false)
 	const [isConclusionOpen, setIsConclusionOpen] = useState(false)
-
-	const isFoodExists = cart.find(c => c.type === 'food')
-	const isServiceExists = cart.find(c => c.type === 'service')
 
 	useEffect(() => {
 		setPhone(statePhone)
@@ -69,8 +65,6 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 		const errors: {
 			name?: string
 			phone?: string
-			deliveryTimeFood?: string
-			deliveryTimeService?: string
 		} = {}
 
 		if (!name.trim()) {
@@ -84,17 +78,6 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 			valid = false
 		} else if (!phoneRegex.test(phone)) {
 			errors.phone = 'Неверный формат номера телефона'
-			valid = false
-		}
-
-		// Проверяем оба времени доставки
-		if (isFoodExists && !deliveryTimeFood.trim()) {
-			errors.deliveryTimeFood = 'Время доставки еды обязательно'
-			valid = false
-		}
-
-		if (isServiceExists && !deliveryTimeService.trim()) {
-			errors.deliveryTimeService = 'Время доставки услуг обязательно'
 			valid = false
 		}
 
@@ -119,9 +102,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 		const foodArray: string[] = []
 
 		cart.forEach(item => {
-			if (item.type === 'service') {
+			if (item.sheetName === 'service') {
 				serviceArray.push(`${item.title}-${item.price}-${item.quantity}`)
-			} else if (item.type === 'food') {
+			} else if (item.sheetName === 'food') {
 				foodArray.push(
 					`${item.title} ${item.variant}-${item.price}-${item.quantity}`
 				)
@@ -148,7 +131,6 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 					username: username || '',
 					time: {
 						timeFood: deliveryTimeFood,
-						timeService: deliveryTimeService,
 					},
 					location: currentLocation,
 					type: currentType,
@@ -235,47 +217,20 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 							setCurrentLocation={setCurrentLocation}
 							currentLocation={currentLocation}
 							locations={locations}
-							isLoading={isLoading}
+							isLoading={isLocationsLoading}
 						/>
 
-						{isFoodExists && (
-							<Input
-								header={
-									errors.deliveryTimeFood
-										? errors.deliveryTimeFood
-										: 'Время доставки еды'
-								}
-								placeholder='сегодня в 15:30'
-								value={deliveryTimeFood}
-								onChange={e => setDeliveryTimeFood(e.target.value)}
-								status={errors.deliveryTimeFood ? 'error' : 'default'}
-								before={<span>⏰</span>}
-								disabled={isDisabled}
-							/>
-						)}
+						{
+							cartInfo?.closeTime && cartInfo?.openTime && cartInfo?.deliveryTime ?
+								<DeliveryTimePicker setTime={setDeliveryTimeFood} openTime={cartInfo.openTime} closeTime={cartInfo.closeTime} deliveryTime={cartInfo.deliveryTime} /> :
+									null
+						}
 
-						{isServiceExists && (
-							<Input
-								header={
-									errors.deliveryTimeService
-										? errors.deliveryTimeService
-										: 'Время доставки услуг'
-								}
-								placeholder='сегодня в 15:30'
-								value={deliveryTimeService}
-								onChange={e => setDeliveryTimeService(e.target.value)}
-								status={
-									errors.deliveryTimeService ? 'error' : 'default'
-								}
-								before={<span>⏰</span>}
-								disabled={isDisabled}
-							/>
-						)}
 
 						<Button
 							className='w-full'
 							type='submit'
-							disabled={isDisabled}
+							disabled={isLocationsLoading || isCartInfoLoading}
 						>
 							Дальше
 						</Button>

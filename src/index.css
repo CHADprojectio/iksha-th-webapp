@@ -17,6 +17,10 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+input[readonly] {
+	font-size: 15px;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
