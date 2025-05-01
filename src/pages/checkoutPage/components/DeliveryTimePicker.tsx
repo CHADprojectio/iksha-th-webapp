@@ -58,6 +58,7 @@ const DeliveryTimePicker = ({setTime, openTime, closeTime, deliveryTime}: TDeliv
 
         currentTimeUTC.setHours(currentTimeUTC.getUTCHours() + 3);
         const currentMinutes = currentTimeUTC.getMinutes();
+        currentTimeUTC.setMinutes(currentMinutes + deliveryTime)
 
         const increasedTimeUTC = new Date(currentTime.toUTCString())
         currentTimeUTC.setHours(currentTimeUTC.getUTCHours() + 3);
