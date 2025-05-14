@@ -60,60 +60,60 @@ const CatalogPage: React.FC<CatalogProps> = () => {
 					/>
 
 					<div className=''>
-						{loading && <LoadingComponent />}
-						{type != undefined && data != null ? (
-							<div>
-								<div className='gap-4 flex flex-col gap-y-[30px] '>
-									{data.map((item, i) => {
-										return (
-											<div
-												className='w-full flex gap-2 cursor-pointer rounded-[40px]'
-												onClick={() => {
-													setCurrentItem(item)
-													toggleItemDetailsPopup()
-												}}
-												key={i}
-											>
-												<ImageComponent
-													src={getPhotoUrl(item?.photoUrl)}
-													className='object-cover h-[128px] w-[128px]'
-												/>
-												{/* <img
+						{loading ? <LoadingComponent /> : (
+							type && data && (
+								<div>
+									<div className='gap-4 flex flex-col gap-y-[30px] '>
+										{data.map((item, i) => {
+											return (
+												<div
+													className='w-full flex gap-2 cursor-pointer rounded-[40px]'
+													onClick={() => {
+														setCurrentItem(item)
+														toggleItemDetailsPopup()
+													}}
+													key={i}
+												>
+													<ImageComponent
+														src={getPhotoUrl(item?.photoUrl)}
+														className='object-cover h-[128px] w-[128px]'
+													/>
+													{/* <img
 													className='object-cover h-[128px] w-[128px]'
 													src={item.photoUrl}
 													alt='https://th.bing.com/th/id/OIP.W9-vYFSiy6LSJEHFokqofwHaHa?rs=1&pid=ImgDetMain'
 												/> */}
-												<div className='flex flex-col w-full'>
-													<div className='w-full font-semibold text-h1'>
-														{item.title}
-													</div>
-													<div className='text-p'>
-														от {item.price} руб
+													<div className='flex flex-col w-full'>
+														<div className='w-full font-semibold text-h1'>
+															{item.title}
+														</div>
+														<div className='text-p'>
+															от {item.price} руб
+														</div>
 													</div>
 												</div>
-											</div>
-										)
-									})}
+											)
+										})}
+									</div>
+									<div className='flex w-[80vw] mt-[50px] items-center justify-center'>
+										{pages && pages > 1 && (
+											<Pagination
+												hideNextButton={true}
+												hidePrevButton={true}
+												boundaryCount={1}
+												siblingCount={1}
+												onChange={(_, page) => {
+													setCurrentPage(page)
+												}}
+												page={currentPage}
+												count={pages || 1}
+											/>
+										)}
+									</div>
 								</div>
-								<div className='flex w-[80vw] mt-[50px] items-center justify-center'>
-									{pages && pages > 1 && (
-										<Pagination
-											hideNextButton={true}
-											hidePrevButton={true}
-											boundaryCount={1}
-											siblingCount={1}
-											onChange={(_, page) => {
-												setCurrentPage(page)
-											}}
-											page={currentPage}
-											count={pages || 1}
-										/>
-									)}
-								</div>
-							</div>
-						) : (
-							<div></div>
+							)
 						)}
+
 					</div>
 				</div>
 			</Section>
