@@ -1,11 +1,10 @@
-import {Input, Slider} from "@telegram-apps/telegram-ui";
-import {useEffect, useState} from "react";
-import {TDeliveryTime} from "../types.ts";
+import {Select} from "@telegram-apps/telegram-ui";
+import {useEffect, useMemo, useState} from "react";
 
 const TIME_STEP = 30;
 
 type TDeliveryTimePickerProps = {
-    setTime: (delivery: TDeliveryTime) => void;
+    setTime: (delivery: string) => void;
     openTime: string;
     closeTime: string;
     deliveryTime: number;
@@ -20,97 +19,67 @@ const DeliveryTimePicker = ({setTime, openTime, closeTime, deliveryTime}: TDeliv
         return timePoint
     }
 
-    const getMaxSliderValue = () => {
-        const currentTime = new Date();
-        let currentTimeUTC = new Date(currentTime.toUTCString());
+    const allTimeSlots = useMemo(() => {
+        const todaySlots: string[] = [];
+        const tomorrowSlots: string[] = [];
 
-        currentTimeUTC.setHours(currentTimeUTC.getUTCHours() + 3);
-        const currentMinutes = currentTimeUTC.getMinutes();
-        currentTimeUTC.setMinutes(currentMinutes + deliveryTime);
+        const currentDate = new Date();
 
-        const closeTimeObj = new Date(currentTimeUTC.toUTCString());
+        let currentDateUTC = new Date(currentDate.toUTCString());
+        currentDateUTC.setHours(currentDateUTC.getUTCHours() + 3);
+        const currentMinutes = currentDateUTC.getMinutes();
+        currentDateUTC.setMinutes(currentMinutes + deliveryTime)
+
+        const openTimeObj = new Date(currentDate.toUTCString())
+        const [openHours, openMinutes] = openTime.split(":").map(Number);
+        const openTimeMinutes = openMinutes + deliveryTime;
+        openTimeObj.setHours(openHours, openTimeMinutes);
+
+        const closeTimeObj = new Date(currentDate.toUTCString());
         const [closeHours, closeMinutes] = closeTime.split(":").map(Number);
         closeTimeObj.setHours(closeHours, closeMinutes);
 
-        const openTimeObj = new Date(currentTimeUTC.toUTCString())
-        const [openHours, openMinutes] = openTime.split(":").map(Number);
-        openTimeObj.setHours(openHours, openMinutes + deliveryTime);
+        while (openTimeObj.getTime() <= closeTimeObj.getTime()) {
+            if (currentDateUTC.getTime() < openTimeObj.getTime()) {
+                currentDateUTC = new Date(openTimeObj.getTime());
+                todaySlots.push(`Сегодня в ${prettyTime(currentDateUTC.getHours())}:${prettyTime(currentDateUTC.getMinutes())}`)
 
-        if (currentTimeUTC.getTime() - openTimeObj.getTime() < 0) {
-            currentTimeUTC = openTimeObj;
+                currentDateUTC.setMinutes(currentDateUTC.getMinutes() + TIME_STEP)
+            } else if (currentDateUTC.getTime() <= closeTimeObj.getTime()) {
+                todaySlots.push(`Сегодня в ${prettyTime(currentDateUTC.getHours())}:${prettyTime(currentDateUTC.getMinutes())}`)
+                currentDateUTC.setMinutes(currentDateUTC.getMinutes() + TIME_STEP)
+            }
+
+            tomorrowSlots.push(`Завтра в ${prettyTime(openTimeObj.getHours())}:${prettyTime(openTimeObj.getMinutes())}`)
+
+            openTimeObj.setMinutes(openTimeObj.getMinutes() + TIME_STEP)
         }
 
-        const diffInMilliseconds = closeTimeObj.getTime() - currentTimeUTC.getTime();
+        return [...todaySlots, ...tomorrowSlots]
+    }, [openTime, closeTime, deliveryTime]);
 
-        const diffInMinutes = diffInMilliseconds / (1000 * 60);
-
-        const maxSliderValue = Math.floor(diffInMinutes / TIME_STEP);
-
-        return maxSliderValue < 0 ? 0 : maxSliderValue;
-    }
-
-    const getDeliveryTime = (step: number = 0): TDeliveryTime => {
-        let dayPoint: TDeliveryTime["dayPoint"] = "today"
-        let time: TDeliveryTime["time"] = "";
-
-        const currentTime = new Date();
-        const currentTimeUTC = new Date(currentTime.toUTCString());
-
-        currentTimeUTC.setHours(currentTimeUTC.getUTCHours() + 3);
-        const currentMinutes = currentTimeUTC.getMinutes();
-        currentTimeUTC.setMinutes(currentMinutes + deliveryTime)
-
-        const increasedTimeUTC = new Date(currentTime.toUTCString())
-        currentTimeUTC.setHours(currentTimeUTC.getUTCHours() + 3);
-        increasedTimeUTC.setMinutes(currentMinutes + deliveryTime + (TIME_STEP * step));
-
-        const closeTimeObj = new Date(currentTimeUTC.toUTCString());
-        const [closeHours, closeMinutes] = closeTime.split(":").map(Number);
-        closeTimeObj.setHours(closeHours, closeMinutes);
-
-        const openTimeObj = new Date(currentTimeUTC.toUTCString())
-        const [openHours, openMinutes] = openTime.split(":").map(Number);
-        openTimeObj.setHours(openHours, openMinutes + deliveryTime);
-
-        time = `${prettyTime(increasedTimeUTC.getHours())}:${prettyTime(increasedTimeUTC.getMinutes())}`
-
-        if (closeTimeObj.getTime() - increasedTimeUTC.getTime() < 0) {
-            time = `${prettyTime(closeTimeObj.getHours())}:${prettyTime(closeTimeObj.getMinutes())}`
-        }
-
-        if (currentTimeUTC.getTime() - openTimeObj.getTime() < 0) {
-            const openTimeMinutes = openTimeObj.getMinutes()
-            openTimeObj.setMinutes(openTimeMinutes + (TIME_STEP * step))
-            time = `${prettyTime(openTimeObj.getHours())}:${prettyTime(openTimeObj.getMinutes())}`
-        }
-
-        if (closeTimeObj.getTime() - currentTimeUTC.getTime() < 0) {
-            dayPoint = "next"
-            time = `${prettyTime(openTimeObj.getHours())}:${prettyTime(openTimeObj.getMinutes())}`
-        }
-
-        return {
-            dayPoint,
-            time,
-        }
-    }
-
-    const [delivery, setDelivery] = useState(getDeliveryTime())
+    const [currentTime, setCurrentTime] = useState<string | undefined>(allTimeSlots[0]);
 
     useEffect(() => {
-        setTime(getDeliveryTime())
+        setTime(allTimeSlots[0] ?? "")
     }, []);
 
-    const onSliderValueChange = (step: number) => {
-        const delivery = getDeliveryTime(step);
-        setDelivery(delivery)
-        setTime(delivery)
-    }
-
     return (
-        <div className={"relative grid grid-cols-[60%_40%]"}>
-            <Input className={"pointer-events-none text-sm"} value={`${delivery.dayPoint === "next" ? 'Завтра' : 'Сегодня'} в ${delivery.time}`} header={'Время доставки'} readOnly></Input>
-            <Slider disabled={getMaxSliderValue() === 0} defaultValue={0} min={0} max={getMaxSliderValue()} onChange={onSliderValueChange}></Slider>
+        <div>
+            <Select
+                header='Время доставки'
+                before={<span>⏰️</span>}
+                className='h-[48px] m-0 p-1'
+                value={currentTime}
+                onChange={e => setCurrentTime(e.target.value)}
+                // disabled={isLoading}
+            >
+                {allTimeSlots.map((slot, i) => (
+                    <option key={`${i}-${slot}`} value={slot}>
+                        {slot}
+                    </option>
+                ))}
+            </Select>
         </div>
     )
 }

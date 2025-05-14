@@ -7,7 +7,6 @@ import { setCurrentName, setCurrentPhone } from 'store/slices/dataSlice'
 import close from 'icons/close.png'
 import {useGetLocations} from "../../hooks/useGetLocations.ts";
 import DeliveryTimePicker from "./components/DeliveryTimePicker.tsx";
-import {TDeliveryTime} from "./types.ts";
 import {useGetCartInfo} from "../../hooks/useGetCartInfo.ts";
 interface CheckoutPageProps {}
 
@@ -29,7 +28,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const [name, setName] = useState(stateName)
 	const [phone, setPhone] = useState('')
 	const [deliveryTimeFood, setDeliveryTimeFood] =
-		useState<TDeliveryTime | null>(null)
+		useState<string | null>(null)
 
 	const [errors, setErrors] = useState<{
 		name?: string
