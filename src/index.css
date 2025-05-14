@@ -21,6 +21,14 @@ input[readonly] {
 	font-size: 15px;
 }
 
+.datetime-picker > :first-child {
+	padding-right: 4px;
+}
+
+.datetime-picker > :nth-child(2) {
+	padding-left: 4px;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
