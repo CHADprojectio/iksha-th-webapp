@@ -25,6 +25,12 @@ const CheckoutPage: React.FC<CheckoutPageProps> = () => {
 	const [userId, setUserId] = useState('')
 	const [username, setUsername] = useState('')
 
+	useEffect(() => {
+		if (!currentLocation) {
+			setCurrentLocation(locations[0])
+		}
+	}, [locations]);
+
 	const [name, setName] = useState(stateName)
 	const [phone, setPhone] = useState('')
 	const [deliveryTimeFood, setDeliveryTimeFood] =
