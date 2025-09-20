@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
 interface TypesComponentProps {
 	setCurrentSubType: React.Dispatch<React.SetStateAction<string>>
@@ -10,8 +10,18 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 	currentSubType,
 	types,
 }) => {
+	const [localType, setLocalType] = useState<string>(currentSubType)
+
+	useEffect(() => {
+		if (types && !currentSubType) {
+			setLocalType(types[0]);
+		} else {
+			setLocalType(currentSubType)
+		}
+	}, [types, currentSubType]);
+
 	if (!types) return
-	console.log(types)
+
 	return (
 		<div>
 			{types && (
@@ -29,13 +39,13 @@ const TypesComponent: React.FC<TypesComponentProps> = ({
 									whiteSpace: 'nowrap',
 									cursor: 'pointer',
 									backgroundColor:
-										currentSubType == item
+										localType == item
 											? 'var(--tgui--button_color)'
 											: 'var(--tgui--secondary_fill)',
 									color: 'var(--tgui--button_text_color)',
 								}}
 								className={`${
-									currentSubType == item ? '' : ''
+									localType == item ? '' : ''
 								} px-2 rounded-lg max-w-auto flex justify-center cursor-pointer items-center text-nowrap`}
 								key={i}
 							>

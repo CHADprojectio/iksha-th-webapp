@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import ICartItem from 'interfaces/ICartItem'
 
 // Define a type for the slice state
-interface CartState {
+export interface CartState {
 	cart: ICartItem[]
 }
 

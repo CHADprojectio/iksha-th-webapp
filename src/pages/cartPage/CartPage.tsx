@@ -1,13 +1,15 @@
 import {Button, Divider, IconButton} from '@telegram-apps/telegram-ui'
-import React, {useEffect, useMemo} from 'react'
+import React, {useMemo} from 'react'
 import {Spinner} from '@telegram-apps/telegram-ui'
 import {useAppDispatch, useAppSelector} from 'store/hooks'
-import {removeFromCart} from 'store/slices/cartSlice'
+import {decrementQuantity, incrementQuantity, removeFromCart} from 'store/slices/cartSlice'
 import close from 'icons/close.png'
 import {useNavigate} from 'react-router-dom'
 import getPhotoUrl from 'src/helpers/GetPhotoUrl'
 import {useGetCartInfo} from "../../hooks/useGetCartInfo.ts";
 import {cn} from "../../lib/utils.ts";
+import SelectQuantity from "../../components/SelectQuantity.tsx";
+import ICartItem from "interfaces/ICartItem.ts";
 
 interface CartPageProps {
     toggleCartOpen: () => void
@@ -17,10 +19,6 @@ const CartPage: React.FC<CartPageProps> = ({toggleCartOpen}) => {
     const cart = useAppSelector(state => state.cart.cart)
 
     const cartInfo = useGetCartInfo();
-
-    useEffect(() => {
-        console.log(cartInfo)
-    }, [cartInfo]);
 
     const summary = cart.reduce(
         (acc, item) => acc + item.price * item.quantity,
@@ -36,6 +34,20 @@ const CartPage: React.FC<CartPageProps> = ({toggleCartOpen}) => {
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+
+    const handleQuantityChange = (item: ICartItem, action: "increment" | "decrement") => {
+        const payload = { title: item.title, variant: item.variant }
+        if (action === 'increment') {
+            dispatch(incrementQuantity(payload))
+        } else {
+            if (item.quantity > 1) {
+                dispatch(decrementQuantity(payload))
+            } else {
+                dispatch(removeFromCart(payload))
+            }
+        }
+    }
+
     return (
         <div
             style={{background: 'var(--tgui--secondary_bg_color)'}}
@@ -99,6 +111,7 @@ const CartPage: React.FC<CartPageProps> = ({toggleCartOpen}) => {
                                                 </div>
                                             </div>
                                         </div>
+                                        <SelectQuantity className={"w-fit mb-2"} minQuantity={1} quantity={item.quantity} size={"m"} handleQuantityChange={(val) => handleQuantityChange(item, val)} />
                                         <Divider/>
                                         <div className='flex justify-between mt-2'>
                                             <div className='flex gap-2'>

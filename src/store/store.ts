@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
-import dataReducer from './slices/dataSlice'
-import cartReducer from './slices/cartSlice'
+import dataReducer, { type CounterState } from './slices/dataSlice'
+import cartReducer, { type CartState } from './slices/cartSlice'
 
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // импорт для работы с localStorage
-import { combineReducers } from 'redux'
+import { combineReducers, type Reducer, type AnyAction } from 'redux'
+import {configureStore} from "@reduxjs/toolkit";
 
 // Комбинируем редюсеры
 const rootReducer = combineReducers({
@@ -12,13 +12,17 @@ const rootReducer = combineReducers({
 	cart: cartReducer,
 })
 
-// Настройка persist
-const persistConfig = {
-	key: 'root',
-	storage,
+export type RootState = {
+	data: CounterState
+	cart: CartState
 }
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+// Настройка persist
+const persistConfig = { key: 'root', storage }
+const persistedReducer = persistReducer<RootState, AnyAction>(
+	persistConfig,
+	rootReducer as Reducer<RootState, AnyAction>
+)
 
 export const store = configureStore({
 	reducer: persistedReducer, // используем persistReducer
@@ -27,5 +31,4 @@ export const store = configureStore({
 export const persistor = persistStore(store) // Экспортируем persistor для использования в приложении
 
 // Типизация RootState и AppDispatch
-export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
