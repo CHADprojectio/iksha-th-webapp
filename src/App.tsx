@@ -1,9 +1,9 @@
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom'
 
 import cart from 'icons/cart.png'
 import CartPage from './pages/cartPage/CartPage'
 import { useEffect, useState } from 'react'
-import { IconButton, TabsList } from '@telegram-apps/telegram-ui'
+import {IconButton, Tabbar} from '@telegram-apps/telegram-ui'
 import MainPage from './pages/mainPage/MainPage'
 import CatalogPage from './pages/catalogPage/CatalogPage'
 import SuccessPage from './pages/successPage/SuccessPage'
@@ -20,6 +20,11 @@ const App = () => {
 	const toggleCartOpen = () => setIsCartOpen(!isCartOpen)
 	const cartData = useAppSelector(state => state.cart.cart)
 	const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+	const location = useLocation()
+	const queryParams = new URLSearchParams(location.search)
+	const type = queryParams.get('type')
+
 	const navigate = useNavigate()
 	useEffect(() => {
 		if (window.Telegram?.WebApp) {
@@ -36,19 +41,14 @@ const App = () => {
 	return (
 		<div className={`relative ${theme == 'dark' ? 'dark' : 'light'}`}>
 			<div className='fixed bottom-0 w-screen h-[40px] z-50'>
-				<TabsList>
-					<TabsItem
-						onClick={() => {
-							navigate('/catalog?type=food')
-						}}
-						selected={false}
-					>
+				<Tabbar>
+					<TabsItem onClick={() => navigate('/catalog?type=food')} selected={type === 'food'}>
 						Еда
 					</TabsItem>
-					<TabsItem onClick={() => navigate('/catalog?type=service')}>
+					<TabsItem onClick={() => navigate('/catalog?type=service')} selected={type === 'service'}>
 						Услуги
 					</TabsItem>
-				</TabsList>
+				</Tabbar>
 			</div>
 
 			<div className='fixed flex flex-col gap-3 z-[10] right-2 bottom-[70px]'>

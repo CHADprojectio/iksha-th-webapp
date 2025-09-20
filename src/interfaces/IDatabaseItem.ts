@@ -1,7 +1,7 @@
 export default interface IDatabaseItem {
 	title: string
 	price: number
-	type: string
+	sheetName: string
 	description?: string
 	variants?: string[]
 	priceVariants?: number[]

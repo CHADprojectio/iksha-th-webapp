@@ -30,10 +30,10 @@ interface ItemDetailsPopupProps {
 }
 
 const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
-	item,
-	toggleItemDetailsPopup,
-	isItemDetailsPopupOpen,
-}) => {
+															   item,
+															   toggleItemDetailsPopup,
+															   isItemDetailsPopupOpen,
+														   }) => {
 	const cart = useAppSelector(state => state.cart.cart)
 	const dispatch = useAppDispatch()
 	const [variants, setVariants] = useState<string[]>([])
@@ -86,7 +86,7 @@ const ItemDetailsPopup: React.FC<ItemDetailsPopupProps> = ({
 		} else {
 			dispatch(
 				addItemToCart({
-					type: item.type,
+					sheetName: item.sheetName,
 					photoUrl: getPhotoUrl(item?.photoUrl),
 					title: item.title,
 					price: currentPrice ?? item.price,
