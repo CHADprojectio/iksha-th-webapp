@@ -13,6 +13,7 @@ import FoodPage from './pages/foodPage/FoodPage'
 import { TabsItem } from '@telegram-apps/telegram-ui/dist/components/Navigation/TabsList/components/TabsItem/TabsItem'
 import {useAppSelector} from "store/hooks.ts";
 import {getCartTotalQuantity} from "./helpers/get-cart-total-quantity.ts";
+import PaymentStatus from "./pages/payment-status/PaymentStatus.tsx";
 
 const App = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
@@ -69,6 +70,7 @@ const App = () => {
 			<Routes>
 				<Route path="/" element={<Navigate to="/catalog?type=food" replace />} />
 				<Route element={<CatalogPage />} path='/catalog' />
+				<Route element={<PaymentStatus />} path='/payment-status' />
 				{/* <Route element={<CatalogPage />} path='/catalog/service' /> */}
 				{/* <Route element={<CatalogPage />} path='/catalog/food' /> */}
 				<Route element={<CheckoutPage />} path='/checkout' />
