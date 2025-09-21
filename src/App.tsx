@@ -1,10 +1,9 @@
-import {Route, Routes, useLocation, useNavigate} from 'react-router-dom'
+import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom'
 
 import cart from 'icons/cart.png'
 import CartPage from './pages/cartPage/CartPage'
 import { useEffect, useState } from 'react'
 import {IconButton, Tabbar} from '@telegram-apps/telegram-ui'
-import MainPage from './pages/mainPage/MainPage'
 import CatalogPage from './pages/catalogPage/CatalogPage'
 import SuccessPage from './pages/successPage/SuccessPage'
 import CheckoutPage from './pages/checkoutPage/CheckoutPage'
@@ -68,7 +67,7 @@ const App = () => {
 			</div>
 			{isCartOpen && <CartPage toggleCartOpen={toggleCartOpen} />}
 			<Routes>
-				<Route element={<MainPage />} path='/' />
+				<Route path="/" element={<Navigate to="/catalog?type=food" replace />} />
 				<Route element={<CatalogPage />} path='/catalog' />
 				{/* <Route element={<CatalogPage />} path='/catalog/service' /> */}
 				{/* <Route element={<CatalogPage />} path='/catalog/food' /> */}
